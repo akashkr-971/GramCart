@@ -184,7 +184,8 @@ export default function Login() {
     </div>
   );
 }
-function setError(_message: string) {
+function setError(message: string) {
+  message = "";
   throw new Error('Function not implemented.');
 }
 

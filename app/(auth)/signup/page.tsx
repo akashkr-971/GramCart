@@ -204,7 +204,9 @@ export default function Signup() {
 
       if (error) throw error;
       setVerified(true);
-      router.push('/dashboard');
+      if(verified){
+        router.push('/dashboard');
+      }
     } catch (error) {
       setErrors({ otp: (error as Error).message });
     } finally {
