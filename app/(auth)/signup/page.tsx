@@ -184,7 +184,7 @@ export default function Signup() {
       setOtpSent(true);
       setCountdown(30);
     } catch (error) {
-      setErrors({ form: (error as any).message });
+      setErrors({ form: (error as Error).message });
     } finally {
       setLoading(false);
     }

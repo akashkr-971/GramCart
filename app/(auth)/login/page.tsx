@@ -186,6 +186,9 @@ export default function Login() {
 }
 function setError(message: string) {
   message = "";
+  if(!message) {
+    console.error("Login Error:", message);
+  }
   throw new Error('Function not implemented.');
 }
 
