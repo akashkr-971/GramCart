@@ -66,11 +66,6 @@ export default function Login() {
   const [visible , setVisible] = useState(false);
   const t = translations[lang];
 
-  function setError(message: string) {
-    throw new Error('Function not implemented.');
-  } 
-
-
   const handlesubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
       const formData = {
@@ -189,3 +184,7 @@ export default function Login() {
     </div>
   );
 }
+function setError(_message: string) {
+  throw new Error('Function not implemented.');
+}
+

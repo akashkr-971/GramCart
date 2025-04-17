@@ -21,7 +21,7 @@ export default function Testimonials() {
           key={index}
           className="bg-white p-4 rounded-lg shadow-md border-l-4 border-green-600"
         >
-          <p className="text-gray-700 italic">"{testimonial.feedback}"</p>
+          <p className="text-gray-700 italic">&quot;{testimonial.feedback}&quot;</p>
           <h4 className="text-green-800 font-bold mt-2">- {testimonial.name}</h4>
         </div>
       ))}
