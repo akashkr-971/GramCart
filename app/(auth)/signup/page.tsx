@@ -159,15 +159,18 @@ export default function Signup() {
   const handleSendOTP = async () => {
     setErrors({});
     const field = usePhone ? 'phone' : 'email';
-    const value = usePhone ? phone : email;
+    let value = usePhone ? phone : email;
     
     if (!validateField(field, value)) return;
     if (!validateField('password', password)) return;
 
+    if (usePhone) {
+      value = '+91' + phone;
+    }
     setLoading(true);
     try {
       const { error } = await supabase.auth.signInWithOtp({
-        ...(usePhone ? { phone: phone } : { email: email }),
+        ...(usePhone ? { phone: value } : { email: email }),
         options: {
           data: {
             name,
@@ -216,7 +219,7 @@ export default function Signup() {
 
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data , error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -228,8 +231,29 @@ export default function Signup() {
         }
       });
 
+      if(data.user){
+      const {error: dberror} = await supabase.from('users').insert([
+        { id: data.user.id,name: name, email: email, address: address, user_type: userType }
+      ]);
+      if(dberror){
+        console.error("Inserting user data Error:", dberror.message);
+        setErrors({ form: dberror.message })
+        return;
+      }
+      if (!dberror) {
+        localStorage.setItem("userId", data.user.id);
+        console.log("User signed up successfully:", data.user.id);
+        window.location.href = '/';
+      }
+    }
+
       if (error) throw error;
-      router.push('/verify-email');
+      const userId = data.user?.id;
+        console.log("User ID:", userId);
+        if (userId) {
+          localStorage.setItem("userId", userId);
+        }
+      router.push('/');
     } catch (error) {
       setErrors({ form: (error as Error).message });
     } finally {
@@ -379,7 +403,7 @@ export default function Signup() {
           {otpSent && usePhone && (
             <div>
               <label className="block text-black mb-2 font-medium">{t.otpLabel}</label>
-              <div className="flex gap-2">
+              <div className="flex gap-2 text-black">
                 {Array(6).fill('').map((_, i) => (
                   <input
                     key={i}

@@ -1,4 +1,5 @@
 'use client';
+import { supabase } from '../../utils/supabaseClient';
 
 import { useState } from "react";
 
@@ -65,6 +66,35 @@ export default function Login() {
   const [visible , setVisible] = useState(false);
   const t = translations[lang];
 
+  function setError(message: string) {
+    throw new Error('Function not implemented.');
+  } 
+
+
+  const handlesubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
+      const formData = {
+        email: (e.currentTarget[0] as HTMLInputElement).value,
+        password: (e.currentTarget[1] as HTMLInputElement).value,
+      };
+      console.log("Form Data:", formData);
+      const {data,error} = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password
+      });
+      if (error) {
+        setError(error.message);
+        console.error("Login Error:", error.message);
+      } else {
+        console.log("Login Successful:", data);
+        const userId = data.user?.id;
+        console.log("User ID:", userId);
+        if (userId) {
+          localStorage.setItem("userId", userId);
+        }
+        window.location.href = "/";
+      }
+    }
 
 
   return (
@@ -74,7 +104,7 @@ export default function Login() {
           {t.title}
         </h1>
 
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handlesubmit}>
           <div>
             <label className="block text-gray-700 mb-2 font-medium">
               {t.emailLabel}
