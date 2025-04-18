@@ -5,7 +5,43 @@ import { supabase } from '../utils/supabaseClient';
 
 type Language = 'english' | 'hindi' | 'malayalam' | 'tamil';
 
-const translations: Record<Language, { [key: string]: any }> = {
+type BusinessTypes = {
+  clothing: string;
+  handmade: string;
+  seedsandsapling: string;
+  dairyproducts: string;
+  farmingtools: string;
+};
+
+type DeliveryOptions = {
+  partner: string;
+  packaging: string;
+  pickup: string;
+};
+
+type Translation = {
+  title: string;
+  name: string;
+  aadhaar: string;
+  village: string;
+  district: string;
+  state: string;
+  pinCode: string;
+  businessType: string;
+  businessTypes: BusinessTypes;
+  businessProof: string;
+  deliveryMethod: string;
+  deliveryOptions: DeliveryOptions;
+  bankName: string;
+  accountNumber: string;
+  ifsc: string;
+  upi: string;
+  additionalDetails: string;
+  submit: string;
+};
+
+
+const translations: Record<Language, Translation> = {
   english: {
     title: 'Seller Onboarding',
     name: 'Name',
