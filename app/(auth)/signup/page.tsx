@@ -111,7 +111,7 @@ export default function Signup() {
   const [lang, setLang] = useState<"en" | "hi" | "ta" | "ml">("en");
   const t = translations[lang];
   
-  const [userType, setUserType] = useState<'seller' | 'buyer'>('buyer');
+  const [userType, setUserType] = useState<'seller' | 'buyer' | 'admin'>('buyer');
   const [usePhone, setUsePhone] = useState(true);
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
@@ -170,14 +170,7 @@ export default function Signup() {
     setLoading(true);
     try {
       const { error } = await supabase.auth.signInWithOtp({
-        ...(usePhone ? { phone: value } : { email: email }),
-        options: {
-          data: {
-            name,
-            address,
-            user_type: userType
-          }
-        }
+        ...(usePhone ? { phone: value } : { email: email })
       });
 
       if (error) throw error;
@@ -196,11 +189,32 @@ export default function Signup() {
 
     setLoading(true);
     try {
-      const { error } = await supabase.auth.verifyOtp(
+      const { data,error } = await supabase.auth.verifyOtp(
         usePhone
           ? { phone, token: otpCode, type: 'sms' }
           : { email, token: otpCode, type: 'email' }
       );
+      
+      if(data.user){
+        console.log("User ID:", data.user.id);
+        const {error: dberror} = await supabase.from('users').insert([
+          { id: data.user.id,name: name, email: email, address: address, user_type: userType, phone_number:null}
+        ]);
+        if(dberror){
+          console.error("Inserting user data Error:", dberror.message);
+          setErrors({ form: dberror.message })
+          return;
+        }
+        localStorage.setItem("userId", data.user.id);
+        console.log("User signed up successfully:", data.user.id);
+        if(userType === 'seller'){
+          window.location.href = '/sellerdashboard';
+        }else{
+          window.location.href = '/';
+        }
+      }else{
+        console.error("User sign up Error:", error?.message);
+      }
 
       if (error) throw error;
       setVerified(true);
@@ -223,40 +237,30 @@ export default function Signup() {
     try {
       const { data , error } = await supabase.auth.signUp({
         email,
-        password,
-        options: {
-          data: {
-            name,
-            address,
-            user_type: userType
-          }
-        }
+        password
       });
 
       if(data.user){
-      const {error: dberror} = await supabase.from('users').insert([
-        { id: data.user.id,name: name, email: email, address: address, user_type: userType }
-      ]);
-      if(dberror){
-        console.error("Inserting user data Error:", dberror.message);
-        setErrors({ form: dberror.message })
-        return;
-      }
-      if (!dberror) {
+        console.log("User ID:", data.user.id);
+        const {error: dberror} = await supabase.from('users').insert([
+          { id: data.user.id,name: name, email: email, address: address, user_type: userType, phone_number:null}
+        ]);
+        if(dberror){
+          console.error("Inserting user data Error:", dberror.message);
+          setErrors({ form: dberror.message })
+          return;
+        }
         localStorage.setItem("userId", data.user.id);
         console.log("User signed up successfully:", data.user.id);
-        window.location.href = '/';
-      }
-    }
-
-      if (error) throw error;
-      const userId = data.user?.id;
-        console.log("User ID:", userId);
-        if (userId) {
-          localStorage.setItem("userId", userId);
+        if(userType === 'seller'){
+          window.location.href = '/newseller';
+        }else{
+          window.location.href = '/';
         }
-      router.push('/');
-    } catch (error) {
+      }else{
+        console.error("User sign up Error:", error?.message);
+      }
+    }catch (error) {
       setErrors({ form: (error as Error).message });
     } finally {
       setLoading(false);

@@ -1,7 +1,7 @@
 'use client';
 import { supabase } from '../../utils/supabaseClient';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const translations: Record<'en' | 'hi' | 'ta' | 'ml', {
   title: string;
@@ -66,6 +66,13 @@ export default function Login() {
   const [visible , setVisible] = useState(false);
   const t = translations[lang];
 
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      window.location.href = "/";
+    }
+  }, []);
+
   const handlesubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
       const formData = {
@@ -78,7 +85,6 @@ export default function Login() {
         password: formData.password
       });
       if (error) {
-        setError(error.message);
         console.error("Login Error:", error.message);
       } else {
         console.log("Login Successful:", data);
@@ -87,7 +93,36 @@ export default function Login() {
         if (userId) {
           localStorage.setItem("userId", userId);
         }
-        window.location.href = "/";
+        const { data: userData, error: userError } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', userId)
+          .single();
+        if (userError || !userData) {
+          console.error("User Data Fetch Error:", userError?.message || "No user found");
+          window.location.href = '/';
+          return;
+        }
+        console.log("User Data:", userData);
+        const userType = userData.user_type;
+        console.log("User Type:", userType);
+        if(userType === 'admin'){
+          window.location.href = '/admindashboard';
+        }else if(userType === 'seller'){
+          const { data} = await supabase
+            .from('sellers')
+            .select('*')
+            .eq('user_id', userId)
+            .single();
+          if (data) {
+            window.location.href = '/seller';
+          } else {
+            window.location.href = '/newseller';
+            return;
+          }
+        }else{
+          window.location.href = '/';
+        }
       }
     }
 
@@ -184,11 +219,3 @@ export default function Login() {
     </div>
   );
 }
-function setError(message: string) {
-  message = "";
-  if(!message) {
-    console.error("Login Error:", message);
-  }
-  throw new Error('Function not implemented.');
-}
-

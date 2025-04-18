@@ -33,28 +33,6 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Center - Navigation Links (Desktop) */}
-          <div className="hidden md:flex space-x-8">
-            <Link 
-              href="/marketplace" 
-              className="text-gray-600 hover:text-green-700 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            >
-              Marketplace
-            </Link>
-            <Link 
-              href="/farmers" 
-              className="text-gray-600 hover:text-green-700 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            >
-              Farmers
-            </Link>
-            <Link 
-              href="/about" 
-              className="text-gray-600 hover:text-green-700 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            >
-              About
-            </Link>
-          </div>
-
           {/* Right Side - Auth & Language */}
           <div className="flex items-center gap-4">
             {/* Language Switcher */}
@@ -73,6 +51,12 @@ export default function Navbar() {
             {/* Auth Buttons */}     
             {isLoggedIn ? (
               <div className="flex items-center gap-4">
+                <Link 
+                  href="/about" 
+                  className="text-gray-600 hover:text-green-700 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                >
+                  About
+                </Link>
                 <Link
                   href="/cart"
                   className="text-gray-600 hover:text-green-700 px-3 py-2 rounded-md text-sm font-medium transition-colors"
@@ -111,30 +95,6 @@ export default function Navbar() {
               </div>
             )}
           </div>
-        </div>
-      </div>
-
-      {/* Mobile Menu */}
-      <div className="md:hidden">
-        <div className="px-2 pt-2 pb-3 space-y-1">
-          <Link 
-            href="/marketplace" 
-            className="text-gray-600 hover:text-green-700 block px-3 py-2 rounded-md text-base font-medium"
-          >
-            Marketplace
-          </Link>
-          <Link 
-            href="/farmers" 
-            className="text-gray-600 hover:text-green-700 block px-3 py-2 rounded-md text-base font-medium"
-          >
-            Farmers
-          </Link>
-          <Link 
-            href="/about" 
-            className="text-gray-600 hover:text-green-700 block px-3 py-2 rounded-md text-base font-medium"
-          >
-            About
-          </Link>
         </div>
       </div>
     </nav>
