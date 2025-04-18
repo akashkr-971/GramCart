@@ -110,10 +110,11 @@ export default function Login() {
           window.location.href = '/admindashboard';
         }else if(userType === 'seller'){
           const { data} = await supabase
-            .from('sellers')
+            .from('seller')
             .select('*')
-            .eq('user_id', userId)
+            .eq('id', userId)
             .single();
+          console.log("Seller Data:", data);
           if (data) {
             window.location.href = '/seller';
           } else {
