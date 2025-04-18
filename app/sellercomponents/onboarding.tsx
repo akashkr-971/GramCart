@@ -5,7 +5,7 @@ import { supabase } from '../utils/supabaseClient';
 
 type Language = 'english' | 'hindi' | 'malayalam' | 'tamil';
 
-const translations: Record<Language, any> = {
+const translations: Record<Language, { [key: string]: any }> = {
   english: {
     title: 'Seller Onboarding',
     name: 'Name',
