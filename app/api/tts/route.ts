@@ -40,8 +40,14 @@ export async function POST(req: Request) {
             'Content-Type': 'audio/mpeg',
         },
         });
-    } catch (error: any) {
-        console.error('TTS error:', error?.response?.data || error.message);
-        return new NextResponse('TTS failed', { status: 500 });
+    } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+        console.error('TTS error:', error.response?.data || error.message);
+    } else if (error instanceof Error) {
+        console.error('TTS error:', error.message);
+    } else {
+        console.error('TTS error:', 'Unknown error occurred');
+    }
+    return new NextResponse('TTS failed', { status: 500 });
     }
 }
