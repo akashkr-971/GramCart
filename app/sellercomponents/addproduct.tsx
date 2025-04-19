@@ -2,7 +2,6 @@
 import { useState, useRef } from 'react';
 import { CloudArrowUpIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { supabase } from '../utils/supabaseClient';
-import Categories from '../components/Categories';
 
 const AddProduct = () => {
   const userid = localStorage.getItem('userId');
@@ -79,6 +78,9 @@ const AddProduct = () => {
 
       if (error) {
         throw new Error(error.message);
+      }
+      if(!data) {
+        throw new Error('No data returned from Supabase storage upload');
       }
       const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/products/${userid}/${productData.name}`;
       const { error: insertError } = await supabase.from('products').insert([

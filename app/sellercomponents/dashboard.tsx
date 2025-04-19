@@ -8,7 +8,7 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 const DashBoard = () => {
   const [products, setProducts] = useState<{ id: number; name: string; price: number; stock: number }[]>([]);
-  const [editingProduct, setEditingProduct] = useState<EditingProduct | null>(null);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [withdrawAmount, setWithdrawAmount] = useState('');
 
   useEffect(() => {
@@ -38,10 +38,9 @@ const DashBoard = () => {
     stock: number;
   }
 
-  interface EditingProduct extends Product {}
 
   const handleEditProduct = (product: Product): void => {
-    setEditingProduct(product as EditingProduct);
+    setEditingProduct(product);
   };
 
   const handleUpdateProduct = async () => {
