@@ -282,7 +282,8 @@ export default function OnboardingForm() {
   };
 
   async function helperfunction(input: string) {
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
       console.log('SpeechRecognition not supported in this browser.');
       return;
@@ -344,7 +345,9 @@ export default function OnboardingForm() {
           </div>
         </div>
 
-        <div onMouseOver={() => helperfunction(translations[language].hint)} className="text-center mb-6 text-gray-600">
+        <div
+        className="text-center mb-6 text-gray-600 w-1/2 mx-auto" 
+        onMouseOver={() => helperfunction(translations[language].hint)}>
           {translations[language].hint}
         </div>
 
