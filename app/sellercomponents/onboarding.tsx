@@ -38,8 +38,8 @@ type Translation = {
   upi: string;
   additionalDetails: string;
   submit: string;
+  hint:string;
 };
-
 
 const translations: Record<Language, Translation> = {
   english: {
@@ -71,6 +71,7 @@ const translations: Record<Language, Translation> = {
     upi: 'UPI ID (optional)',
     additionalDetails: 'Additional Details',
     submit: 'Submit',
+    hint:'Click or hover over an input to read aloud',
   },
   hindi: {
     title: 'विक्रेता पंजीकरण',
@@ -101,6 +102,7 @@ const translations: Record<Language, Translation> = {
     upi: 'UPI आईडी (वैकल्पिक)',
     additionalDetails: 'अतिरिक्त विवरण',
     submit: 'जमा करें',
+    hint:'एक इनपुट पर क्लिक करें या होवर करें पढ़ने के लिए',
   },
   malayalam: {
     title: 'വ്യാപാരി ഓൺബോർഡിംഗ്',
@@ -131,6 +133,7 @@ const translations: Record<Language, Translation> = {
     upi: 'UPI ഐഡി (ഐച്ഛികം)',
     additionalDetails: 'കൂടുതൽ വിവരങ്ങൾ',
     submit: 'സമർപ്പിക്കുക',
+    hint:'ഒരു ഇൻപുട്ടിൽ ക്ലിക്ക് ചെയ്യുക അല്ലെങ്കിൽ ഹോവർ ചെയ്യുക വായിക്കാൻ',
   },
   tamil: {
     title: 'விற்பனையாளர் பதிவு',
@@ -161,6 +164,7 @@ const translations: Record<Language, Translation> = {
     upi: 'UPI ஐடி (விருப்பம்)',
     additionalDetails: 'கூடுதல் விவரங்கள்',
     submit: 'சமர்ப்பிக்கவும்',
+    hint:'ஒரு உள்ளீட்டில் கிளிக் செய்யவும் அல்லது ஒலிக்க மிதிக்கவும்',
   },
 };
 
@@ -185,6 +189,7 @@ type Errors = Partial<Record<keyof FormData, string>>;
 
 export default function OnboardingForm() {
   const [language, setLanguage] = useState<Language>('english');
+  const [dropdownOpened, setDropdownOpened] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     name: '',
     aadhaar: '',
@@ -276,6 +281,44 @@ export default function OnboardingForm() {
     }
   };
 
+  async function helperfunction(input: string) {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      console.log('SpeechRecognition not supported in this browser.');
+      return;
+    }
+    if(language === 'english' || language === 'hindi'){
+      if ('speechSynthesis' in window) {
+        const utter = new SpeechSynthesisUtterance(input);
+        if(language === 'english'){
+          utter.lang = 'en-GB'; 
+          window.speechSynthesis.speak(utter);
+        } else {
+          utter.lang = 'hi-IN';
+          window.speechSynthesis.speak(utter);
+        }    
+      } else {
+        console.log('SpeechSynthesis not supported in this browser.');
+      }    
+    } else {
+        console.log("TTS CALLED");
+        const res = await fetch('/api/tts', {
+          method:'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ input, language }),
+      });
+      if(!res){
+        console.log('TTS Failed')
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      audio.play();
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-8">
@@ -301,6 +344,10 @@ export default function OnboardingForm() {
           </div>
         </div>
 
+        <div onMouseOver={() => helperfunction(translations[language].hint)} className="text-center mb-6 text-gray-600">
+          {translations[language].hint}
+        </div>
+
         <div className="space-y-8">
           {/* Personal Details Card */}
           <div className="bg-green-50 rounded-xl p-6 shadow-sm">
@@ -312,7 +359,7 @@ export default function OnboardingForm() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {/* Name Input */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2" id="nameLabel">
                   {translations[language].name}
                 </label>
                 <div className="relative">
@@ -322,6 +369,12 @@ export default function OnboardingForm() {
                       errors.name ? 'border-red-500' : 'border-green-200'
                     } focus:ring-2 focus:ring-green-500 focus:border-green-500`}
                     value={formData.name}
+                    onClick={() => {
+                      const text = (document.querySelector('#nameLabel') as HTMLLabelElement)?.innerText || '';if (text) {
+                        helperfunction(text);
+                        }
+                    }
+                    }
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="Ramesh Kumar"
                   />
@@ -336,7 +389,7 @@ export default function OnboardingForm() {
 
               {/* Aadhaar Input */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2" id='aadharlabel'>
                   {translations[language].aadhaar}
                 </label>
                 <div className="relative">
@@ -348,6 +401,11 @@ export default function OnboardingForm() {
                     value={formData.aadhaar}
                     onChange={(e) => setFormData({ ...formData, aadhaar: e.target.value })}
                     placeholder="1234 5678 9012"
+                    onClick={() => {
+                      const text = (document.getElementById('aadharlabel') as HTMLLabelElement)?.innerText || '';
+                      if (text) helperfunction(text);
+                      }
+                    }
                   />
                   {errors.aadhaar && (
                     <span className="absolute right-3 top-3 text-red-500">✗</span>
@@ -363,7 +421,7 @@ export default function OnboardingForm() {
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                   {/* Village Input */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2" id='villagelabel'>
                       {translations[language].village}
                     </label>
                     <input
@@ -373,6 +431,11 @@ export default function OnboardingForm() {
                       } focus:ring-2 focus:ring-green-500 focus:border-green-500`}
                       value={formData.village}
                       onChange={(e) => setFormData({ ...formData, village: e.target.value })}
+                      onClick={() => {
+                      const text = (document.getElementById('villagelabel') as HTMLLabelElement)?.innerText || '';
+                      if (text) helperfunction(text);
+                      }
+                    }
                     />
                     {errors.village && (
                     <p className="text-red-500 text-sm mt-1">{errors.village}</p>
@@ -381,7 +444,7 @@ export default function OnboardingForm() {
 
                   {/* District Input */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2" id='district'>
                       {translations[language].district}
                     </label>
                     <input
@@ -391,6 +454,11 @@ export default function OnboardingForm() {
                       } focus:ring-2 focus:ring-green-500 focus:border-green-500`}
                       value={formData.district}
                       onChange={(e) => setFormData({ ...formData, district: e.target.value })}
+                      onClick={() => {
+                      const text = (document.getElementById('district') as HTMLLabelElement)?.innerText || '';
+                      if (text) helperfunction(text);
+                      }
+                    }
                     />
                     {errors.district && (
                   <p className="text-red-500 text-sm mt-1">{errors.district}</p>
@@ -399,7 +467,7 @@ export default function OnboardingForm() {
 
                   {/* State Input */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2" id="state">
                       {translations[language].state}
                     </label>
                     <input
@@ -409,6 +477,11 @@ export default function OnboardingForm() {
                       } focus:ring-2 focus:ring-green-500 focus:border-green-500`}
                       value={formData.state}
                       onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                      onClick={() => {
+                      const text = (document.getElementById('state') as HTMLLabelElement)?.innerText || '';
+                      if (text) helperfunction(text);
+                      }
+                    }
                     />
                     {errors.state && (
                   <p className="text-red-500 text-sm mt-1">{errors.state}</p>
@@ -417,7 +490,7 @@ export default function OnboardingForm() {
 
                   {/* Pin Code Input */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2" id="pincodelabel">
                       {translations[language].pinCode}
                     </label>
                     <input
@@ -428,6 +501,11 @@ export default function OnboardingForm() {
                       value={formData.pinCode}
                       onChange={(e) => setFormData({ ...formData, pinCode: e.target.value })}
                       placeholder="6 digits"
+                      onClick={() => {
+                      const text = (document.getElementById('pincodelabel') as HTMLLabelElement)?.innerText || '';
+                      if (text) helperfunction(text);
+                      }
+                    }
                     />
                     {errors.pinCode && (
                   <p className="text-red-500 text-sm mt-1">{errors.pinCode}</p>
@@ -449,7 +527,7 @@ export default function OnboardingForm() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2" id="bussinesstype">
                     {translations[language].businessType}
                   </label>
                   <select
@@ -457,7 +535,20 @@ export default function OnboardingForm() {
                       errors.businessType ? 'border-red-500' : 'border-green-200'
                     } focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white`}
                     value={formData.businessType}
-                    onChange={(e) => setFormData({ ...formData, businessType: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, businessType: e.target.value })
+                      const selectedText = e.target.options[e.target.selectedIndex].text;
+                      helperfunction(selectedText);
+                      setDropdownOpened(true);
+                    }}
+                    onBlur={() => setDropdownOpened(false)}
+                    onClick={() => {
+                      if (!dropdownOpened) {
+                        const text = (document.getElementById('bussinesstype') as HTMLLabelElement)?.innerText || '';
+                        if (text) helperfunction(text);
+                      }
+                      }
+                    }
                   >
                     <option value="">{translations[language].businessType}</option>
                     {Object.entries(translations[language].businessTypes).map(([key, value]) => (
@@ -473,12 +564,18 @@ export default function OnboardingForm() {
 
                 {/* File Upload */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2" id='proof'
+                  
+                  >
                     {translations[language].businessProof}
                   </label>
                   <div className={`border-2 border-dashed ${
                     errors.businessProof ? 'border-red-500' : 'border-green-300'
-                  } rounded-lg p-6 text-center hover:border-green-500 transition-colors`}>
+                  } rounded-lg p-6 text-center hover:border-green-500 transition-colors`} onMouseEnter={ () =>{
+                        const text = (document.getElementById('proof') as HTMLLabelElement)?.innerText || '';
+                        if (text) helperfunction(text);
+                      }
+                      }>
                     <input
                       type="file"
                       accept="image/*,application/pdf"
@@ -507,8 +604,11 @@ export default function OnboardingForm() {
               </div>
 
               {/* Delivery Method */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div onMouseEnter={ () =>{
+                        const text = (document.getElementById('method') as HTMLLabelElement)?.innerText || '';
+                        if (text) helperfunction(text);
+              }}>
+                <label className="block text-sm font-medium text-gray-700 mb-2" id='method'>
                   {translations[language].deliveryMethod}
                 </label>
                 <div className="space-y-4">
@@ -524,9 +624,14 @@ export default function OnboardingForm() {
                       <input
                         type="radio"
                         name="deliveryMethod"
+                        id='methodselect'
                         value={key}
                         checked={formData.deliveryMethod === key}
-                        onChange={(e) => setFormData({ ...formData, deliveryMethod: e.target.value })}
+                        onChange={(e) => 
+                          {setFormData({ ...formData, deliveryMethod: e.target.value })
+                          helperfunction(e.target.value)
+
+                        }}
                         className="h-5 w-5 text-green-600 focus:ring-green-500"
                       />
                       <span className="ml-3 text-gray-700">{value as string}</span>
@@ -551,7 +656,7 @@ export default function OnboardingForm() {
               {/* Bank Details */}
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2" id='bankname'>
                     {translations[language].bankName}
                   </label>
                   <input
@@ -561,6 +666,10 @@ export default function OnboardingForm() {
                     } focus:ring-2 focus:ring-green-500 focus:border-green-500`}
                     value={formData.bankName}
                     onChange={(e) => setFormData({ ...formData, bankName: e.target.value })}
+                    onClick={()=>{
+                      const text = (document.getElementById('bankname') as HTMLLabelElement)?.innerText || '';
+                        if (text) helperfunction(text);
+                    }}
                     placeholder="State Bank of India"
                   />
                     {errors.bankName && (
@@ -569,7 +678,7 @@ export default function OnboardingForm() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2" id="accountno">
                     {translations[language].accountNumber}
                   </label>
                   <input
@@ -580,6 +689,10 @@ export default function OnboardingForm() {
                     value={formData.accountNumber}
                     onChange={(e) => setFormData({ ...formData, accountNumber: e.target.value })}
                     placeholder="1234567890"
+                    onClick={()=>{
+                      const text = (document.getElementById('accountno') as HTMLLabelElement)?.innerText || '';
+                        if (text) helperfunction(text);
+                    }}
                   />
                     {errors.accountNumber && (
                         <p className="text-red-500 text-sm mt-1">{errors.accountNumber}</p>
@@ -590,7 +703,7 @@ export default function OnboardingForm() {
               {/* IFSC & UPI */}
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2" id='ifsc'>
                     {translations[language].ifsc}
                   </label>
                   <input
@@ -601,6 +714,10 @@ export default function OnboardingForm() {
                     value={formData.ifsc}
                     onChange={(e) => setFormData({ ...formData, ifsc: e.target.value })}
                     placeholder="SBIN0000123"
+                    onClick={()=>{
+                      const text = (document.getElementById('ifsc') as HTMLLabelElement)?.innerText || '';
+                        if (text) helperfunction(text);
+                    }}
                   />
                     {errors.ifsc && (
                         <p className="text-red-500 text-sm mt-1">{errors.ifsc}</p>
@@ -608,7 +725,7 @@ export default function OnboardingForm() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2" id="upi">
                     {translations[language].upi}
                   </label>
                   <input
@@ -619,6 +736,10 @@ export default function OnboardingForm() {
                     value={formData.upi}
                     onChange={(e) => setFormData({ ...formData, upi: e.target.value })}
                     placeholder="username@bank"
+                    onClick={()=>{
+                      const text = (document.getElementById('upi') as HTMLLabelElement)?.innerText || '';
+                        if (text) helperfunction(text);
+                    }}
                   />
                   
                 </div>
@@ -628,13 +749,19 @@ export default function OnboardingForm() {
 
           {/* Additional Details */}
           <div className="bg-green-50 rounded-xl p-6 shadow-sm">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Additional Information</h2>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6" id='addinfo'>
+              {translations[language].additionalDetails}
+            </h2>
             <textarea
               className="w-full px-4 py-3 rounded-lg border border-green-200 focus:ring-2 focus:ring-green-500 focus:border-green-500"
               rows={4}
               value={formData.additionalDetails}
               onChange={(e) => setFormData({ ...formData, additionalDetails: e.target.value })}
               placeholder={translations[language].additionalDetails + "..."}
+              onClick={()=>{
+                const text = (document.getElementById('addinfo') as HTMLLabelElement)?.innerText || '';
+                  if (text) helperfunction(text);
+              }}
             />
           </div>
 
@@ -642,6 +769,11 @@ export default function OnboardingForm() {
           <div className="text-center">
             <button
               onClick={handleSubmit}
+              id='subbtn'
+              onMouseOver={()=>{
+                const text = (document.getElementById('subbtn') as HTMLLabelElement)?.innerText || '';
+                  if (text) helperfunction(text);
+              }}
               className="w-full sm:w-auto px-8 py-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-lg transition-all transform hover:scale-105"
             >
               {translations[language].submit}
