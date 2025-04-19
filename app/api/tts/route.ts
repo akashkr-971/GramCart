@@ -9,13 +9,9 @@ interface TTSRequestBody {
 }
 
 export async function POST(req: Request) {
-    let { input, lang}: TTSRequestBody = await req.json();
-    const text = input
-    if(lang == 'tamil'){
-        lang = 'ta-IN';
-    }else{
-        lang = 'ml-IN';
-    }
+    const { input, lang }: TTSRequestBody = await req.json();
+    const text = input;
+    let language = lang === 'tamil' ? 'ta-IN' : 'ml-IN';
         
     const apiKey = process.env.GOOGLE_TTS_API_KEY;
 
@@ -29,7 +25,7 @@ export async function POST(req: Request) {
         {
             input: { text },
             voice: {
-            languageCode: lang,
+            languageCode: language,
             ssmlGender: 'NEUTRAL',
             },
             audioConfig: {
