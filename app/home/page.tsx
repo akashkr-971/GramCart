@@ -7,6 +7,7 @@ import Testimonials from '../components/Testimonials';
 import AddTestimonial from '../components/addtestimonial';
 import Govtscheme from '../components/govtscheme';
 import RuralAssistFeatures from '../components/ruralassistfeature';
+import ProductCard from '../components/productcard';
 
 
 export default function HomePage() {
@@ -14,6 +15,7 @@ export default function HomePage() {
     <div className="bg-gray-100 min-h-screen">
       <HeroBanner />
       <SearchBar/>
+    
       <div className="container mx-auto px-4 py-8">
         <h2 className="text-2xl font-bold text-green-800 mb-4">Rural Assistance Features</h2>
         <RuralAssistFeatures />

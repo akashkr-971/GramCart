@@ -1,19 +1,68 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import ProductCard from './productcard';
+import { supabase } from '../utils/supabaseClient';
+
+const CACHE_EXPIRY_TIME = 5 * 60 * 1000; // 5 minutes in milliseconds
+
 export default function RecommendedItems() {
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const cachedData = localStorage.getItem('products');
+      const cachedTime = localStorage.getItem('cacheTime');
+      
+      if (cachedData && cachedTime) {
+        const cacheTimestamp = parseInt(cachedTime, 10);
+        const currentTime = Date.now();
+
+        // Check if the cache is still valid (within 5 minutes)
+        if (currentTime - cacheTimestamp < CACHE_EXPIRY_TIME) {
+          setProducts(JSON.parse(cachedData));
+          setLoading(false);
+          return;
+        } else {
+          // Cache expired, delete cached data
+          localStorage.removeItem('products');
+          localStorage.removeItem('cacheTime');
+        }
+      }
+
+      // Fetch new data if no valid cache is available
+      const { data, error } = await supabase.from('products').select('*');
+      if (error) {
+        console.error('Error fetching products:', error);
+      } else {
+        setProducts(data || []);
+        localStorage.setItem('products', JSON.stringify(data)); // Cache new data
+        localStorage.setItem('cacheTime', Date.now().toString()); // Store the current time of caching
+      }
+      setLoading(false);
+    };
+
+    fetchProducts();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+
   return (
-    <div id="recommended" className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      {[1, 2, 3, 4].map((item) => (
-        <div key={item} className="bg-white p-4 rounded-lg shadow-md">
-          <img
-            src={'wheat.jpeg'}
-            alt={`Item ${item}`}
-            className="w-full h-40 object-cover rounded-md mb-2"
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {products.length > 0 ? (
+        products.map((product, index) => (
+          <ProductCard
+            key={product.id || index}
+            image={product.image_url}
+            title={product.name || 'Product Name'}
+            price={product.price || 0}
+            rating={product.rating || 0}
           />
-          <h3 className="text-lg text-black font-semibold mb-2">Wheat</h3>
-          <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-            View Details
-          </button>
-        </div>
-      ))}
+        ))
+      ) : (
+        <p>No products available</p>
+      )}
     </div>
   );
 }
