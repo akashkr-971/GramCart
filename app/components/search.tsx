@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 const SearchBar = () => {
   const [query, setQuery] = useState('');
@@ -39,11 +39,6 @@ const SearchBar = () => {
       setLoading(false);
     }
   };
-
-  function sendredirect()
-  {
-    
-  }
   return (
     <div className="relative w-full max-w-2xl mx-auto mt-5">
       <div className="relative p-5 flex items-center">
