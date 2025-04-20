@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import axios from 'axios';
 
-// Define the request body shape
 interface TTSRequestBody {
   input: string;
   text: string;

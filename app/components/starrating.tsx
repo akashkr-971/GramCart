@@ -3,7 +3,6 @@ import React from 'react'
 const StarRating = ({rating}:{rating:number}) => {
   const fullstar = Math.floor(rating);
   const halfstar = rating - fullstar;
-  console.log(fullstar, halfstar);
 
   const stars= []
   for (let i = 0; i < fullstar; i++) {
