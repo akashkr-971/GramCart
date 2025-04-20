@@ -4,8 +4,6 @@ import Navbar from '../components/NavBar';
 import Image from 'next/image';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import PaymentComponent from '../components/paymentcomponent';
-import AddressForm from '../components/addresssetup';
 
 interface CartItem {
   id: string;
@@ -19,7 +17,7 @@ interface CartItem {
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [step, setStep] = useState<'cart' | 'payment'>('cart');
+  const [step] = useState<'cart' | 'payment'>('cart');
 
   useEffect(() => {
     const cart = localStorage.getItem('cart');

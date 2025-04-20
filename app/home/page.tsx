@@ -7,7 +7,6 @@ import Testimonials from '../components/Testimonials';
 import AddTestimonial from '../components/addtestimonial';
 import Govtscheme from '../components/govtscheme';
 import RuralAssistFeatures from '../components/ruralassistfeature';
-import ProductCard from '../components/productcard';
 
 
 export default function HomePage() {

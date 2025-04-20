@@ -7,7 +7,7 @@ import { supabase } from '../utils/supabaseClient';
 const CACHE_EXPIRY_TIME = 5 * 60 * 1000; // 5 minutes in milliseconds
 
 export default function RecommendedItems() {
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<{ id: number; image_url: string; name: string; price: number; rating: number }[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
