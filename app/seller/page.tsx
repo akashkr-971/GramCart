@@ -5,6 +5,8 @@ import { supabase } from '../utils/supabaseClient';
 import AddProduct from '../sellercomponents/addproduct';
 import Dashboard from '../sellercomponents/dashboard'; 
 import Profile from '../sellercomponents/sellerprofile';
+import Footer from '../components/Footer';
+import Askai from '../sellercomponents/askai';
 
 export default function Seller() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -103,6 +105,7 @@ export default function Seller() {
         </div>
       </div>
     </nav>
+    <Askai/>
     <div>
       {selectedBar === "Dashboard" && 
         <div>
@@ -117,7 +120,9 @@ export default function Seller() {
             <Profile/>  
         </div>}
     </div>
-    
+    <div>
+      <Footer/>
+    </div>
     </>
     
   );

@@ -3,13 +3,15 @@ import { ChartBarIcon, CurrencyDollarIcon, ShoppingBagIcon } from '@heroicons/re
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { supabase } from '../utils/supabaseClient';
+import toast from 'react-hot-toast';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const DashBoard = () => {
-  const [products, setProducts] = useState<{ id: number; name: string; price: number; stock: number }[]>([]);
+  const [products, setProducts] = useState<{ id: number; name: string; price: number; stock: number; category: string }[]>([]);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [withdrawAmount, setWithdrawAmount] = useState('');
+  const [totalproducts, setTotalProducts] = useState(0);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -20,6 +22,9 @@ const DashBoard = () => {
         .from('products')
         .select('*')
         .eq('seller_id', userId);
+
+      const totalproducts = data?.length;
+      setTotalProducts(totalproducts || 0);
 
       if (error) {
         console.error('Error fetching products:', error);
@@ -36,6 +41,7 @@ const DashBoard = () => {
     name: string;
     price: number;
     stock: number;
+    category: string;
   }
 
 
@@ -45,17 +51,18 @@ const DashBoard = () => {
 
   const handleUpdateProduct = async () => {
     if (!editingProduct) return;
-    const { id, name, price, stock } = editingProduct;
+    const { id, name, price, stock ,category} = editingProduct;
     const { error } = await supabase
       .from('products')
-      .update({ name, price, stock })
+      .update({ name, price, stock, category })
       .eq('id', id);
 
     if (error) {
       console.error('Error updating product:', error);
     } else {
       setEditingProduct(null);
-      alert('Product updated successfully!');
+      window.location.reload();
+      toast.success('Product updated successfully!');
     }
   };
 
@@ -69,11 +76,12 @@ const DashBoard = () => {
 
   const stats = [
     { name: 'Total Sales', value: '₹1,20,000', icon: <ShoppingBagIcon className="h-6 w-6 text-green-500" /> },
-    { name: 'Total Products', value: '150', icon: <ChartBarIcon className="h-6 w-6 text-blue-500" /> },
-    { name: 'Total Profit', value: '₹50,000', icon: <CurrencyDollarIcon className="h-6 w-6 text-yellow-500" /> },
+    { name: 'Total Products', value: totalproducts, icon: <ChartBarIcon className="h-6 w-6 text-blue-500" /> },
+    { name: 'Remaining Profit', value: '₹50,000', icon: <CurrencyDollarIcon className="h-6 w-6 text-yellow-500" /> },
   ];
 
-  const recentSales = [
+  const recentSales = 
+  [
     { product: 'Organic Wheat', date: 'April 18, 2025', amount: '₹2,000' },
     { product: 'Fresh Vegetables', date: 'April 17, 2025', amount: '₹1,500' },
     { product: 'Dairy Products', date: 'April 16, 2025', amount: '₹3,000' },
@@ -148,6 +156,7 @@ const DashBoard = () => {
       {/* Withdraw Balance Section */}
       <div className="bg-white shadow-lg rounded-xl p-8 mb-16">
         <h2 className="text-3xl font-bold text-gray-900 mb-6">Withdraw Balance</h2>
+        <h4 className="text-2xl font-bold text-gray-900 mb-6">Available Balance : {stats[2].value}</h4>
         <div className="flex flex-col gap-4">
           <input
             type="number"
@@ -175,6 +184,7 @@ const DashBoard = () => {
                 <th className="border-b py-3 px-4 text-lg font-medium text-gray-500">Product Name</th>
                 <th className="border-b py-3 px-4 text-lg font-medium text-gray-500">Price</th>
                 <th className="border-b py-3 px-4 text-lg font-medium text-gray-500">Stock</th>
+                <th className="border-b py-3 px-4 text-lg font-medium text-gray-500">Category</th>
                 <th className="border-b py-3 px-4 text-lg font-medium text-gray-500">Actions</th>
               </tr>
             </thead>
@@ -184,6 +194,7 @@ const DashBoard = () => {
                   <td className="py-3 px-4 text-lg text-gray-900">{product.name}</td>
                   <td className="py-3 px-4 text-lg text-gray-500">₹{product.price}</td>
                   <td className="py-3 px-4 text-lg text-gray-500">{product.stock}</td>
+                  <td className="py-3 px-4 text-lg text-gray-500">{product.category}</td>
                   <td className="py-3 px-4 text-lg text-gray-900">
                     <button
                       onClick={() => handleEditProduct(product)}
@@ -201,12 +212,13 @@ const DashBoard = () => {
 
       {/* Edit Product Modal */}
       {editingProduct && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-gray-200 flex items-center justify-center">
           <div className="bg-white rounded-lg shadow-lg p-8 w-96">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Edit Product</h2>
             <div className="flex flex-col gap-4">
               <input
                 type="text"
+                required
                 value={editingProduct.name}
                 onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })}
                 placeholder="Product Name"
@@ -214,6 +226,7 @@ const DashBoard = () => {
               />
               <input
                 type="number"
+                required
                 value={editingProduct.price}
                 onChange={(e) => setEditingProduct({ ...editingProduct, price: parseFloat(e.target.value) || 0 })}
                 placeholder="Price"
@@ -221,11 +234,31 @@ const DashBoard = () => {
               />
               <input
                 type="number"
+                required
                 value={editingProduct.stock}
-                onChange={(e) => setEditingProduct({ ...editingProduct, stock: parseInt(e.target.value) || 0 })}
+                onChange={(e) => setEditingProduct({ ...editingProduct, stock: e.target.value === '' ? 1 : parseInt(e.target.value, 10) })}
                 placeholder="Stock"
                 className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
               />
+              <select
+                name="category"
+                required
+                value={editingProduct.category || ''}
+                onChange={(e) => setEditingProduct({ ...editingProduct, category:e.target.value })}
+                className={`block w-full p-2 rounded-md border`}
+                >
+                <option value="" disabled>
+                  Select a category
+                </option>
+                <option value="Clothing">Clothing</option>
+                <option value="Farming">Farming</option>
+                <option value="Handcraft">Handcraft</option>
+                <option value="Vegetable">Vegetable</option>
+                <option value="Grains and Pulses">Grains and Pulses</option>
+                <option value="Seeds and Sapling">Seeds and Sapling</option>
+                <option value="Dairy Products">Dairy Products</option>
+                </select>
+                
               <div className="flex justify-end gap-4">
                 <button
                   onClick={() => setEditingProduct(null)}
