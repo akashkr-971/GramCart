@@ -105,7 +105,7 @@ export default function Seller() {
         </div>
       </div>
     </nav>
-    <Askai/>
+    <Askai role="Seller" />
     <div>
       {selectedBar === "Dashboard" && 
         <div>

@@ -31,6 +31,8 @@ const SellerProfile = () => {
         const { data, error } = await supabase.from('seller').select('*').eq('id', userId).single();
         if (data) {
           setProfileData(data);
+          const sellername = data.name;
+          localStorage.setItem('sellername', sellername);
         } else {
           console.error('Error fetching profile data:', error);
         }

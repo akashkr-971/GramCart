@@ -22,12 +22,11 @@ const SearchBar = () => {
       const res = await fetch('/api/groq', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userInput: value }),
+        body: JSON.stringify({ userInput: value , task: 'search' }),
       });
 
       const data = await res.json();
       if (data.result) {
-        // You can customize how to split results here
         setResults(data.result.split('\n').filter(Boolean));
       } else {
         setResults([]);
@@ -56,6 +55,12 @@ const SearchBar = () => {
           type="text"
           value={query}
           onChange={handleSearch}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              window.location.href = `/product/${query}`;
+            }
+          }}
           placeholder="Search for crops, farmers, or products..."
           className="w-full pl-10 pr-6 py-3 border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
         />

@@ -100,6 +100,27 @@ const DashBoard = () => {
     ],
   };
 
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    const sellername = localStorage.getItem('sellername');
+
+    if (userId) {
+      const sellerdetails = [
+        {
+          id: 1,
+          name: sellername,
+          total_sales: stats[0].value,
+          total_products: totalproducts,
+          remaining_profit: stats[2].value,
+          seller_products: products
+        }
+      ];
+      console.log("Storing sellerdetails:", sellerdetails);
+      localStorage.setItem('sellerdetails', JSON.stringify(sellerdetails));
+    }
+  }, [products, totalproducts]);
+
+
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-6 overflow-x-hidden">
       <h1 className="mt-10 text-4xl font-extrabold text-gray-900 mb-12 text-center">Seller Dashboard</h1>

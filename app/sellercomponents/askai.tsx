@@ -1,7 +1,11 @@
 'use client';
 import { useState } from 'react';
 
-export default function AskAIWidget() {
+interface AskaiProps {
+  role: string;
+}
+
+export default function AskAIWidget({role}: AskaiProps) {
   const [showChat, setShowChat] = useState(false);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -12,22 +16,35 @@ export default function AskAIWidget() {
     if (!message.trim()) return;
 
     const userMessage = { sender: 'user' as const, text: message };
+    console.log(userMessage);
+    console.log(message);
+
     setHistory(prev => [...prev, userMessage]);
     setLoading(true);
     setMessage('');
 
+    const sellerData = localStorage.getItem('sellerdetails');
+
     try {
-      const res = await fetch('/api/groq', {
+        const res = await fetch('/api/groq', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message }),
+        body: JSON.stringify({ 
+            userInput: message, 
+            task: 'chat', 
+            actor: role,
+            sellerData:sellerData,
+         }),
       });
+
+      if (!res.ok) throw new Error('API Error');
 
       const data = await res.json();
       const aiMessage = { sender: 'ai' as const, text: data?.reply || 'No response' };
       setHistory(prev => [...prev, aiMessage]);
     } catch (err) {
       setHistory(prev => [...prev, { sender: 'ai', text: 'Error contacting AI' }]);
+      console.error('AI Error:', err);
     } finally {
       setLoading(false);
     }
@@ -66,7 +83,7 @@ export default function AskAIWidget() {
                       : 'bg-gray-100 text-left mr-auto max-w-[80%]'
                   }`}
                 >
-                  <strong>{msg.sender === 'user' ? 'You' : 'AI'}:</strong> {msg.text}
+                  <strong>{msg.sender === 'user' ? 'You' : 'GramiAi'}:</strong> {msg.text}
                 </div>
               ))}
               {loading && <div className="text-gray-500 text-sm">GramiAI is thinking...</div>}
