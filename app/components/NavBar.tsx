@@ -42,9 +42,7 @@ type Language = keyof typeof translations;
 
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [language, setLanguage] = useState<Language>(
-    (localStorage.getItem('lang') as Language) || 'en'
-  );
+  const [language, setLanguage] = useState<Language>('en');
 
   useEffect(() => {
     const userId = localStorage.getItem('userId');
@@ -62,8 +60,10 @@ export default function Navbar() {
   };
 
   const setlanguage = (lang: Language) => {
-    // localStorage.setItem('lang', lang);
-    window.location.reload();
+    useEffect(() => {
+      localStorage.setItem('lang', lang);
+      window.location.reload();
+    })
     setLanguage(lang);
   };
 
