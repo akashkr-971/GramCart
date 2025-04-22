@@ -51,12 +51,6 @@ export default function Navbar() {
             {/* Auth Buttons */}     
             {isLoggedIn ? (
               <div className="flex items-center gap-4">
-                <Link 
-                  href="/about" 
-                  className="text-gray-600 hover:text-green-700 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                >
-                  About
-                </Link>
                 <Link
                   href="/cart"
                   className="text-gray-600 hover:text-green-700 px-3 py-2 rounded-md text-sm font-medium transition-colors"

@@ -7,17 +7,22 @@ import Testimonials from '../components/Testimonials';
 import AddTestimonial from '../components/addtestimonial';
 import Govtscheme from '../components/govtscheme';
 import RuralAssistFeatures from '../components/ruralassistfeature';
+import ArtisansNearYou from '../components/artisansnearyou';
+import SupportCard from '../components/artisanassupport';
 
 
 export default function HomePage() {
   return (
     <div className="bg-gray-100 min-h-screen">
       <HeroBanner />
+      <p className='text-center text-lg font-bold text-green-800 mb-1'>
+        Click on the alert to read aloud
+      </p>
+      <RuralAssistFeatures />
       <SearchBar/>
-    
       <div className="container mx-auto px-4 py-8">
-        <h2 className="text-2xl font-bold text-green-800 mb-4">Rural Assistance Features</h2>
-        <RuralAssistFeatures />
+        <h2 className="text-2xl font-bold text-green-800 mb-4">Support Artisans Near You</h2>
+        <ArtisansNearYou />
       </div>
       <div className="container mx-auto px-4 py-8">
         <h2 className="text-2xl font-bold text-green-800 mb-4">Recommended for You</h2>
@@ -36,6 +41,10 @@ export default function HomePage() {
         <AddTestimonial />
       </div>
       <div className="container mx-auto px-4 py-8">
+        <h2 className="text-2xl font-bold text-green-800 mb-4">Artisans Support Programs</h2>
+        <SupportCard />
+      </div>
+      <div className="container mx-auto px-4 py-8 mt-110 sm:mt-0">
         <h2 className="text-2xl font-bold text-green-800 mb-4">Government Schemes</h2>
         <Govtscheme />
       </div>

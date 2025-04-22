@@ -51,7 +51,7 @@ export default function HeroBanner() {
             <div className="text-sm text-green-100">Organic Products</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-green-300">24h</div>
+            <div className="text-3xl font-bold text-green-300">48h</div>
             <div className="text-sm text-green-100">Delivery Promise</div>
           </div>
         </div>

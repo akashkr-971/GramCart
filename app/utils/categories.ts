@@ -1,0 +1,1 @@
+const categories = ['Clothing', 'Farming', 'Vegetable', 'Grains and Pulses', 'Seeds and sapling', 'Diary Products'] as const; export default categories
