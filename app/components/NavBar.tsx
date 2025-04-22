@@ -59,13 +59,17 @@ export default function Navbar() {
     console.log('Logged out successfully');
   };
 
-  const setlanguage = (lang: Language) => {
-    useEffect(() => {
-      localStorage.setItem('lang', lang);
+  useEffect(() => {
+    if (language) {
+      localStorage.setItem('lang', language);
       window.location.reload();
-    })
-    setLanguage(lang);
-  };
+    }
+  }, [language]);
+
+
+  const setlanguage = (lang: Language) => {
+  setLanguage(lang); 
+};
 
   return (
     <nav className="fixed bg-white/80 backdrop-blur-sm border-b border-green-100 w-full z-50">
