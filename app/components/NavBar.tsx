@@ -62,7 +62,7 @@ export default function Navbar() {
   };
 
   const setlanguage = (lang: Language) => {
-    localStorage.setItem('lang', lang);
+    // localStorage.setItem('lang', lang);
     window.location.reload();
     setLanguage(lang);
   };
