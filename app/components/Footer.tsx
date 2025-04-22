@@ -1,5 +1,107 @@
 'use client';
+
+import { useState } from 'react';
 export default function Footer() {
+
+  const [lang] = useState<keyof typeof translations>(localStorage.getItem('lang') as keyof typeof translations || 'en');
+
+  const translations = {
+    en: {
+      name: "GramCart",
+      about: "Empowering rural India through direct commerce. Bridging farmers with urban markets since 2025.",
+      quickLinks: "Quick Links",
+      marketplace: "Marketplace",
+      farmersDirectory: "Farmers Directory",
+      howItWorks: "How It Works",
+      blog: "Blog",
+      contactUs: "Contact Us",
+      contactDetails: [
+        "GramCart Headquarters",
+        "123 Rural Plaza",
+        "Kerala, India 682507",
+        "Phone: +91 98765 43210",
+        "Email: support@gramcart.in"
+      ],
+      stayUpdated: "Stay Updated",
+      subscribe: "Subscribe",
+      privacyPolicy: "Privacy Policy",
+      termsOfService: "Terms of Service",
+      faq: "FAQ",
+      copyright: "© 2025 GramCart. All rights reserved.",
+    },
+    ta: {
+      name: "கிராமப்புற",
+      about: "நேரடி வணிகம் மூலம் கிராமப்புற இந்தியாவை அதிகாரம் அளிக்கிறோம். 2025 முதல் விவசாயிகளை நகர்ப்புற சந்தைகளுடன் இணைக்கிறோம்.",
+      quickLinks: "விரைவான இணைப்புகள்",
+      marketplace: "சந்தைப்படம்",
+      farmersDirectory: "விவசாயிகள் அடைவு",
+      howItWorks: "இது எவ்வாறு செயல்படுகிறது",
+      blog: "பிளாக்",
+      contactUs: "எங்களைத் தொடர்பு கொள்ளவும்",
+      contactDetails: [
+        "கிராம் கார்ட் தலைமையகம்",
+        "123 கிராமப்புற பிளாசா",
+        "கேரளா, இந்தியா 682507",
+        "தொலைபேசி: +91 98765 43210",
+        "மின்னஞ்சல்: support@gramcart.in"
+      ],
+      stayUpdated: "புதுப்பிப்புகள்",
+      subscribe: "சந்தா",
+      privacyPolicy: "தனியுரிமைக் கொள்கை",
+      termsOfService: "சேவை விதிமுறைகள்",
+      faq: "FAQ",
+      copyright: "© 2025 கிராம் கார்ட். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டுள்ளன."
+    },
+
+    hi: {
+      name: "ग्राम कार्ट",
+      about: "ग्राम कार्ट के माध्यम से ग्रामीण भारत को सशक्त बनाना। 2025 से शहरी बाजारों के साथ किसानों को जोड़ना।",
+      quickLinks: "त्वरित लिंक",
+      marketplace: "बाजार",
+      farmersDirectory: "किसानों की निर्देशिका",
+      howItWorks: "यह कैसे काम करता है",
+      blog: "ब्लॉग",
+      contactUs: "हमसे संपर्क करें",
+      contactDetails: [
+        "ग्राम कार्ट मुख्यालय",
+        "123 ग्रामीण प्लाजा",
+        "केरल, भारत 682507",
+        "फ़ोन: +91 98765 43210",
+        "ईमेल: support@gramcart.in"
+      ],
+      stayUpdated: "अपडेट रहें",
+      subscribe: "सदस्यता लें",
+      privacyPolicy: "गोपनीयता नीति",
+      termsOfService: "सेवा की शर्तें",
+      faq: "FAQ",
+      copyright: "© 2025 ग्राम कार्ट। सभी अधिकार सुरक्षित हैं।"
+    },
+
+    ml: {
+      name: "ഗ്രാമീണ കാർട്ട്",
+      about: "ഗ്രാമ കാർട്ട് വഴി ഗ്രാമീണ ഇന്ത്യയെ ശാക്തികരിപ്പിക്കുന്നു. 2025 മുതൽ നഗരവിപണികളുമായി കർഷകരെ ബന്ധിപ്പിക്കുന്നു.",
+      quickLinks: "വേഗത്തിലുള്ള ലിങ്കുകൾ",
+      marketplace: "വിപണി",
+      farmersDirectory: "കർഷക ഡയറക്ടറി",
+      howItWorks: "ഇത് എങ്ങനെ പ്രവർത്തിക്കുന്നു",
+      blog: "ബ്ലോഗ്",
+      contactUs: "ഞങ്ങളെ ബന്ധപ്പെടുക",
+      contactDetails: [
+        "ഗ്രാമ കാർട്ട് ഹെഡ്ക്വാർട്ടേഴ്സ്",
+        "123 ഗ്രാമീണ പ്ലാസ",
+        "കേരള, ഇന്ത്യ 682507",
+        "ഫോൺ: +91 98765 43210",
+        "ഇമെയിൽ: support@gramcart.in"
+      ],
+      stayUpdated: "അപ്ഡേറ്റ് ചെയ്യുക",
+      subscribe: "സബ്സ്ക്രൈബ് ചെയ്യുക",
+      privacyPolicy: "സ്വകാര്യതാനയം",
+      termsOfService: "സേവന നിബന്ധനകൾ",
+      faq: "FAQ",
+      copyright: "© 2025 ഗ്രാമ കാർട്ട്. എല്ലാ അവകാശങ്ങളും നിക്ഷിപ്തമാണ്."
+    }
+   
+  };
   return (
     <footer className="bg-green-900 text-white border-t border-green-700">
       <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
@@ -7,10 +109,9 @@ export default function Footer() {
           
           {/* About Section */}
           <div className="space-y-4">
-            <h3 className="text-lg font-bold text-green-300 mb-4">GramCart</h3>
+            <h3 className="text-lg font-bold text-green-300 mb-4">{translations[lang].name}</h3>
             <p className="text-sm text-green-100">
-              Empowering rural India through direct commerce. Bridging farmers with 
-              urban markets since 2025.
+              {translations[lang].about}
             </p>
             <div className="flex space-x-4 mt-4">
               <a href="#" className="text-green-100 hover:text-green-300">
@@ -36,30 +137,30 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div className="space-y-2">
-            <h4 className="text-green-300 font-semibold mb-3">Quick Links</h4>
+            <h4 className="text-green-300 font-semibold mb-3">{translations[lang].quickLinks}</h4>
             <nav className="space-y-2">
-              <a href="#" className="text-green-100 hover:text-green-300 block text-sm">Marketplace</a>
-              <a href="#" className="text-green-100 hover:text-green-300 block text-sm">Farmers Directory</a>
-              <a href="#" className="text-green-100 hover:text-green-300 block text-sm">How It Works</a>
-              <a href="#" className="text-green-100 hover:text-green-300 block text-sm">Blog</a>
+              <a href="#" className="text-green-100 hover:text-green-300 block text-sm">{translations[lang].marketplace}</a>
+              <a href="#" className="text-green-100 hover:text-green-300 block text-sm">{translations[lang].farmersDirectory}</a>
+              <a href="#" className="text-green-100 hover:text-green-300 block text-sm">{translations[lang].howItWorks}</a>
+              <a href="#" className="text-green-100 hover:text-green-300 block text-sm">{translations[lang].blog}</a>
             </nav>
           </div>
 
           {/* Contact Info */}
           <div className="space-y-2">
-            <h4 className="text-green-300 font-semibold mb-3">Contact Us</h4>
+            <h4 className="text-green-300 font-semibold mb-3">{translations[lang].contactUs}</h4>
             <div className="text-green-100 text-sm space-y-2">
-              <p>GramCart Headquarters</p>
-              <p>123 Rural Plaza</p>
-              <p>Kerala, India 682507</p>
-              <p>Phone: +91 98765 43210</p>
-              <p>Email: support@gramcart.in</p>
+              <p>{translations[lang].contactDetails[0]}</p>
+              <p>{translations[lang].contactDetails[1]}</p>
+              <p>{translations[lang].contactDetails[2]}</p>
+              <p>{translations[lang].contactDetails[3]}</p>
+              <p>{translations[lang].contactDetails[4]}</p>
             </div>
           </div>
 
           {/* Newsletter */}
           <div className="space-y-4">
-            <h4 className="text-green-300 font-semibold mb-3">Stay Updated</h4>
+            <h4 className="text-green-300 font-semibold mb-3">{translations[lang].stayUpdated}</h4>
             <form className="flex flex-col space-y-3">
               <input 
                 type="email" 
@@ -70,7 +171,7 @@ export default function Footer() {
                 type="submit"
                 className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors font-medium"
               >
-                Subscribe
+                {translations[lang].subscribe}
               </button>
             </form>
           </div>
@@ -80,12 +181,12 @@ export default function Footer() {
         <div className="border-t border-green-800 mt-12 pt-8 text-center">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-sm text-green-400">
-              © 2025 GramCart. All rights reserved.
+              {translations[lang].copyright}
             </p>
             <div className="flex space-x-6">
-              <a href="#" className="text-green-400 hover:text-green-300 text-sm">Privacy Policy</a>
-              <a href="#" className="text-green-400 hover:text-green-300 text-sm">Terms of Service</a>
-              <a href="#" className="text-green-400 hover:text-green-300 text-sm">FAQ</a>
+              <a href="#" className="text-green-400 hover:text-green-300 text-sm">{translations[lang].privacyPolicy}</a>
+              <a href="#" className="text-green-400 hover:text-green-300 text-sm">{translations[lang].termsOfService}</a>
+              <a href="#" className="text-green-400 hover:text-green-300 text-sm">{translations[lang].faq}</a>
             </div>
           </div>
           

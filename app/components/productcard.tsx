@@ -1,5 +1,6 @@
 'use client';
 import React from 'react'
+import { useState } from 'react';
 import Image from 'next/image';
 import StarRating from './starrating';
 import toast from 'react-hot-toast';
@@ -31,11 +32,42 @@ const addToCart = (newItem: CartItem): void => {
   }
 };
 
+const translations ={
+  en: {
+    addToCart: 'Add to Cart',
+    viewDetails: 'View Details',
+  },
+  hi: {
+    addToCart: 'कार्ट में जोड़ें',
+    viewDetails: 'विस्तार से देखें',
+  },
+  ml: {
+    addToCart: `കാർട്ടി
+                ലേക്ക് 
+                ചേർ
+                ക്കുക`,
+    viewDetails: `വിശദാം
+                  ശങ്ങൾ കാണുക`, 
+  },
+  ta: {
+    addToCart: `கார்ட்
+                டில் 
+                சேர்க்
+                கவும்`, 
+    viewDetails: `விவர
+                  ங்க
+                  ளைப்
+                  பார்க்
+                  கவும்`, 
+  }
+}
+
 
 export default function ProductCard({ image, title, price, rating }: ProductCardProps) {
+  const [lang] = useState<keyof typeof translations>(localStorage.getItem('lang') as keyof typeof translations || 'en');
   return (
     <div id="productcard">
-        <div className="bg-white p-4 rounded-lg shadow-md ">
+        <div className="bg-white p-3 rounded-lg shadow-md w-">
           <Image src={image} alt={title} width={200} height={200} className="w-full h-40 object-cover rounded-md mb-2" />
           <h3 className="text-lg text-black font-semibold mb-2">{title}</h3>
           <div className="text-gray-700 mb-2 flex items-center justify-between">
@@ -47,14 +79,14 @@ export default function ProductCard({ image, title, price, rating }: ProductCard
           </div>
           <div className="flex justify-between mt-4 gap-2">
             <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-              View Details
+              {translations[lang].viewDetails}
             </button>
             <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
               onClick={()=>{
                 addToCart({ title, price, image, quantity: 1 });
               }}
             >
-              Add to Cart
+              {translations[lang].addToCart}
             </button>
           </div>
         </div>

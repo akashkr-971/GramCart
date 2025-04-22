@@ -49,7 +49,7 @@ export default function RecommendedItems() {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div className="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {products.length > 0 ? (
         products.map((product, index) => (
           <ProductCard

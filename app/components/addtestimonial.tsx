@@ -31,12 +31,30 @@ const AddTestimonial = () => {
     setIsOpen(false);
   };
 
+  const [lang] = useState<keyof typeof translations>(localStorage.getItem('lang') as keyof typeof translations || 'en');
+
+  const translations = {
+    en: {
+      txt : "Share Your User Story"
+    },
+    hi: {
+      txt: "अपनी उपयोगकर्ता कहानी साझा करें"
+    },
+    ml: {
+      txt: "നിങ്ങളുടെ ഉപയോക്തൃ കഥ പങ്കിടുക"
+    },
+    ta: {
+      txt : "உங்கள் பயனர் கதையை பகிர்ந்து கொள்ளுங்கள்"
+    }
+
+  }
+
   return (
     <div>
       <section className="py-8 bg-gradient-to-r from-green-100 via-green-200 to-green-300 shadow-lg rounded-xl"> {/* Added gradient background and shadow */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <h2 className="text-4xl font-bold text-gray-900">Share Your User Story</h2> {/* Larger font for emphasis */}
+            <h2 className="text-4xl font-bold text-gray-900">{translations[lang].txt}</h2> {/* Larger font for emphasis */}
 
             {/* --- Dialog Component --- */}
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
