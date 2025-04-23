@@ -29,7 +29,7 @@ export default function AskAIWidget({ role }: AskaiProps) {
       recognition.interimResults = false;
       recognition.lang = 'en-US';
 
-      recognition.onresult = (event: any) => {
+      recognition.onresult = (event: SpeechRecognitionEvent) => {
         const transcript = event.results[0][0].transcript;
         setMessage(transcript);
       };
