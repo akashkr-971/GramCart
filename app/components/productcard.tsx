@@ -1,6 +1,6 @@
 'use client';
 import React from 'react'
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import Image from 'next/image';
 import StarRating from './starrating';
 import toast from 'react-hot-toast';
@@ -64,7 +64,16 @@ const translations ={
 
 
 export default function ProductCard({ image, title, price, rating }: ProductCardProps) {
-  const [lang] = useState<keyof typeof translations>(localStorage.getItem('lang') as keyof typeof translations || 'en');
+  const [lang, setLang] = useState<'en' | 'hi' | 'ta' | 'ml'>('en');
+      
+    useEffect(() => {
+      if (typeof window !== 'undefined') {
+        const storedLang = localStorage.getItem('lang') as 'en' | 'hi' | 'ta' | 'ml' | null;
+        if (storedLang) {
+          setLang(storedLang);
+        }
+      }
+    }, []);
   return (
     <div id="productcard">
         <div className="bg-white p-3 rounded-lg shadow-md w-">

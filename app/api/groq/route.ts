@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 export async function POST(req: Request) {
-  const { userInput ,task , actor, sellerdata } = await req.json();
+  const { userInput ,task , actor, sellerdata, lang } = await req.json();
   console.log(userInput);
   console.log(task);
   console.log(actor);
@@ -94,6 +94,34 @@ export async function POST(req: Request) {
           { role: "user", content: userInput },
         ],
         model: "llama3-70b-8192",
+      });
+      return NextResponse.json({ result: completion.choices[0]?.message?.content || "" });
+    }
+    if(task == 'translate'){
+      const completion = await groq.chat.completions.create({
+        messages: [
+          {role: "system" , content:`
+            You are a translation assistant.
+
+            Your task is to translate product data into the target language: ${lang}.
+
+            Instructions:
+            - Return only the translated output.
+            - No explanations, no additional text.
+            - Each product has a name and a description.
+            - Format each product as a JSON object with "name" and "description" keys.
+            - Return the final result as a JSON array of such objects.
+
+            Example format:
+            [
+              { "name": "Translated Name 1", "description": "Translated Description 1" },
+              { "name": "Translated Name 2", "description": "Translated Description 2" },
+              ...
+            ]
+            `},
+          { role: "user", content: userInput },
+        ],
+        model: "compound-beta",
       });
       return NextResponse.json({ result: completion.choices[0]?.message?.content || "" });
     }
