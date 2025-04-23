@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { CurrencyRupeeIcon, BookOpenIcon, UserGroupIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 interface FormOverlayProps {
@@ -11,7 +11,14 @@ export default function SupportPage() {
   const [showFinancialForm, setShowFinancialForm] = useState(false);
   const [showTrainingForm, setShowTrainingForm] = useState(false);
   const [showMentorForm, setShowMentorForm] = useState(false);
-  const [lang] = useState<keyof typeof translations>(localStorage.getItem('lang') as keyof typeof translations || 'en');
+  const [lang, setLang] = useState<'en' | 'hi' | 'ta' | 'ml'>('en');
+  
+    useEffect(() => {
+      const storedLang = localStorage.getItem('lang') as 'en' | 'hi' | null;
+      if (storedLang) {
+        setLang(storedLang);
+      }
+    }, []);
   const translations = {
     en: {
       financialSupport: "Financial Support",

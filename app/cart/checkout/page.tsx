@@ -12,8 +12,8 @@ const Checkout = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const user_id = localStorage.getItem('userId');
     const fetchAddress = async () => {
-      const user_id = localStorage.getItem('userId');
       if (user_id) {
         const { data } = await supabase
           .from('users')

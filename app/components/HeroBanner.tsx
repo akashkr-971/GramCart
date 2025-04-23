@@ -3,13 +3,14 @@
 import { useState, useEffect } from "react";
 export default function HeroBanner() {
 
-  const [lang, setLang] = useState<keyof typeof translations>(localStorage.getItem('lang') as keyof typeof translations || 'en');
-
-  useEffect(() => {
-    const storedLang = localStorage.getItem('lang');
-    setLang(storedLang as keyof typeof translations || 'en');
-    console.log('The stored lang is',storedLang);
-  }, []);
+  const [lang, setLang] = useState<'en' | 'hi' | 'ta' | 'ml'>('en');
+  
+    useEffect(() => {
+      const storedLang = localStorage.getItem('lang') as 'en' | 'hi' | null;
+      if (storedLang) {
+        setLang(storedLang);
+      }
+    }, []);
 
   const translations = {
     en: {

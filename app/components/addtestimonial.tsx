@@ -1,6 +1,6 @@
 'use client';
 import { Dialog, DialogTrigger, DialogContent, DialogOverlay, DialogClose, DialogTitle, DialogDescription } from '@radix-ui/react-dialog';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 
 // Optional: Define an icon component or import one (e.g., from lucide-react)
 const CloseIcon = () => (
@@ -31,7 +31,14 @@ const AddTestimonial = () => {
     setIsOpen(false);
   };
 
-  const [lang] = useState<keyof typeof translations>(localStorage.getItem('lang') as keyof typeof translations || 'en');
+  const [lang, setLang] = useState<'en' | 'hi' | 'ta' | 'ml'>('en');
+  
+    useEffect(() => {
+      const storedLang = localStorage.getItem('lang') as 'en' | 'hi' | null;
+      if (storedLang) {
+        setLang(storedLang);
+      }
+    }, []);
 
   const translations = {
     en: {

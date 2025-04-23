@@ -1,9 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 
 export default function Testimonials() {
-  const [language] = useState<keyof typeof translations>(localStorage.getItem('lang') as keyof typeof translations || 'en');
+  const [lang, setLang] = useState<'en' | 'hi' | 'ta' | 'ml'>('en');
+  
+    useEffect(() => {
+      const storedLang = localStorage.getItem('lang') as 'en' | 'hi' | null;
+      if (storedLang) {
+        setLang(storedLang);
+      }
+    }, []);
 
   const translations: Record<'en' | 'hi' | 'ml' | 'ta', { name: string; feedback: string }[]> = {
     en: [
@@ -67,7 +74,7 @@ export default function Testimonials() {
   return (
     <div>
       <div className="space-y-4">
-        {translations[language].map((testimonial, index) => (
+        {translations[lang].map((testimonial, index) => (
           <div
             key={index}
             className="bg-white p-4 rounded-lg shadow-md border-l-4 border-green-600"

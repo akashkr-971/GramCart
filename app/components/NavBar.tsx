@@ -42,12 +42,16 @@ type Language = keyof typeof translations;
 
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [language, setLanguage] = useState<Language>('en');
+  const [language, setLanguage] = useState<'en' | 'hi' | 'ta' | 'ml'>('en');
 
   useEffect(() => {
     const userId = localStorage.getItem('userId');
     if (userId) {
       setIsLoggedIn(true);
+    }
+    const storedLang = localStorage.getItem('lang') as Language;
+    if (storedLang) {
+      setLanguage(storedLang);
     }
   }, []);
 
@@ -59,17 +63,12 @@ export default function Navbar() {
     console.log('Logged out successfully');
   };
 
-  useEffect(() => {
-    if (language) {
-      localStorage.setItem('lang', language);
-      window.location.reload();
-    }
-  }, [language]);
-
-
   const setlanguage = (lang: Language) => {
-  setLanguage(lang); 
-};
+    localStorage.setItem('lang', lang);
+    setLanguage(lang);
+    console.log('Language changed to', lang);
+    window.location.reload();
+  };
 
   return (
     <nav className="fixed bg-white/80 backdrop-blur-sm border-b border-green-100 w-full z-50">
@@ -88,7 +87,7 @@ export default function Navbar() {
             <div>
               <select
                 className="text-sm text-gray-500 hover:text-green-700 bg-transparent border-none focus:outline-none"
-                defaultValue={language}
+                value={language}
                 onChange={(e) => setlanguage(e.target.value as Language)}
               >
                 <option value="hi">हिन्दी</option>

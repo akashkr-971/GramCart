@@ -1,9 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 export default function Footer() {
 
-  const [lang] = useState<keyof typeof translations>(localStorage.getItem('lang') as keyof typeof translations || 'en');
+  const [lang, setLang] = useState<'en' | 'hi' | 'ta' | 'ml'>('en');
+    
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedLang = localStorage.getItem('lang') as 'en' | 'hi' | 'ta' | 'ml' | null;
+      if (storedLang) {
+        setLang(storedLang);
+      }
+    }
+  }, []);
 
   const translations = {
     en: {

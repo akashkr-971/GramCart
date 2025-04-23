@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 
 import HeroBanner from '../components/HeroBanner';
 import React from 'react';
@@ -15,8 +15,15 @@ import ArtisansNearYou from '../components/artisansnearyou';
 import SupportCard from '../components/artisanassupport';
 
 export default function HomePage() {
-  const [lang] = useState<keyof typeof translations>(localStorage.getItem('lang') as keyof typeof translations || 'en');
+  const [lang, setLang] = useState<'en' | 'hi' | 'ta' | 'ml'>('en');
 
+  useEffect(() => {
+    const storedLang = localStorage.getItem('lang') as 'en' | 'hi' | null;
+    if (storedLang) {
+      setLang(storedLang);
+    }
+  }, []);
+  
 const translations = {
   en: {
     readalert: "Click on the alert to read aloud",
