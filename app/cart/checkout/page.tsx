@@ -35,12 +35,6 @@ const Checkout = () => {
     fetchAddress();
   }, []);
 
-  const handlePayment = () => {
-    alert('Payment successful!');
-    localStorage.removeItem('cart');
-    window.location.href = '/';
-  };
-
   return (
     <div className="bg-white min-h-screen">
       <Navbar />
@@ -63,7 +57,7 @@ const Checkout = () => {
         )}
       </div>
       <div className="p-8">
-        <PaymentComponent onPay={handlePayment} />
+        <PaymentComponent/>
       </div>
     </div>
   );

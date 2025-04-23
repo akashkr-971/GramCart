@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { supabase } from '../utils/supabaseClient';
 import Navbar from '../components/NavBar';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -30,6 +31,34 @@ const Cart = () => {
     }
   }, []);
 
+  const makebooking = async () => {
+    try {
+      const user = localStorage.getItem('userId');
+
+      const booking = {
+        user_id: user,
+        total_amount: subtotal,
+        items: JSON.stringify(cartItems),
+        payment: 'pending',
+        status: 'pending',
+        created_at: new Date().toISOString(),
+      };
+
+      const { error } = await supabase
+        .from('bookings')
+        .insert([booking]);
+
+      if (error) {
+        toast.error('Error processing your booking');
+        console.error(error);
+      } else {
+        toast.success('Booking successfully placed!Please pay the amount');
+      }
+    } catch (error) {
+      toast.error('Something went wrong');
+      console.error(error);
+    }
+  }
 
   const removeFromCart = (title: string) => {
     const updatedCart = cartItems.filter(item => item.title !== title);
@@ -136,7 +165,7 @@ const Cart = () => {
                       Subtotal: ₹{subtotal.toFixed(2)}
                     </p>
                     <button
-                      onClick={() => window.location.href = 'cart/checkout'}
+                      onClick={() => {makebooking();localStorage.setItem('amount', subtotal.toString()) ;window.location.href = 'cart/checkout'}}
                       className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg"
                     >
                       Proceed to Checkout

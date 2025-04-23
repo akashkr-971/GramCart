@@ -36,6 +36,7 @@ export default function RecommendedItems() {
         products.map((product, index) => (
           <ProductCard
             key={product.id || index}
+            id={product.id || 0}
             image={product.image_url}
             title={product.name || 'Product Name'}
             price={product.price || 0}

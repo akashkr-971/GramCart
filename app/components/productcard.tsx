@@ -6,6 +6,7 @@ import StarRating from './starrating';
 import toast from 'react-hot-toast';
 
 interface ProductCardProps {
+  id: number;
   image: string;
   title: string;
   price: number;
@@ -13,6 +14,7 @@ interface ProductCardProps {
 }
 
 interface CartItem {
+  id: number;
   title: string;
   price: number;
   image: string;
@@ -63,7 +65,7 @@ const translations ={
 }
 
 
-export default function ProductCard({ image, title, price, rating }: ProductCardProps) {
+export default function ProductCard({ id,image, title, price, rating }: ProductCardProps) {
   const [lang, setLang] = useState<'en' | 'hi' | 'ta' | 'ml'>('en');
       
     useEffect(() => {
@@ -92,7 +94,7 @@ export default function ProductCard({ image, title, price, rating }: ProductCard
             </button>
             <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
               onClick={()=>{
-                addToCart({ title, price, image, quantity: 1 });
+                addToCart({ title, id, price, image, quantity: 1 });
               }}
             >
               {translations[lang].addToCart}

@@ -13,6 +13,7 @@ import Govtscheme from '../components/govtscheme';
 import RuralAssistFeatures from '../components/ruralassistfeature';
 import ArtisansNearYou from '../components/artisansnearyou';
 import SupportCard from '../components/artisanassupport';
+import AskAIWidget from '../sellercomponents/askai';
 
 export default function HomePage() {
   const [lang, setLang] = useState<'en' | 'hi' | 'ta' | 'ml'>('en');
@@ -103,6 +104,8 @@ const translations = {
         <h2 className="text-2xl font-bold text-green-800 mb-4">{translations[lang].section8}</h2>
         <Govtscheme />
       </div>
+      <AskAIWidget role='buyer'/>
+
     </div>
   );
 }
