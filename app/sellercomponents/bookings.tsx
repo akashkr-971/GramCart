@@ -21,11 +21,12 @@ export default function Bookings() {
   const [bookings, setBookings] = useState<Booking[]>(initialBookings);
 
   const handleMarkAsCompleted = (id: string) => {
-    const updated = bookings.map(b =>
-      b.id === id ? { ...b, status: 'completed' as 'completed' } : b
-    );
-    setBookings(updated);
-  };
+  const updated = bookings.map(b =>
+    b.id === id ? { ...b, status: 'completed' } as Booking : b
+  );
+  setBookings(updated);
+};
+
 
   const upcoming = bookings.filter(b => b.status === 'upcoming');
   const completed = bookings.filter(b => b.status === 'completed');

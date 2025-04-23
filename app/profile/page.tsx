@@ -40,14 +40,6 @@ export default function ProfilePage() {
     address: string;
   }
 
-  interface Order {
-    id: string;
-    date: string;
-    items: string[];
-    status: string;
-    total: string;
-  }
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setProfileData((prevData: ProfileData) => ({ ...prevData, [name]: value }));

@@ -13,7 +13,9 @@ const ArtisansNearYou = () => {
     const fetchProducts = async () => {
       const { data, error } = await supabase
         .from('products')
-        .select('*');
+        .select('*')
+        .order('random()', { ascending: true })
+        .limit(6);
       
       if (error) {
         console.error('Error fetching products:', error);
