@@ -26,7 +26,7 @@ const ProductPage = () => {
     const { data: fetchedData, error } = await supabase
       .from('products')
       .select('*')
-      .eq('category', 'Farming');
+      .eq('category', 'Grains and Pulses');
 
         if(data){
             console.log(data);
@@ -39,6 +39,7 @@ const ProductPage = () => {
 
       setData(fetchedData as Product[]);
     };
+
     fetchData();
   }, [item]);
 
@@ -50,7 +51,7 @@ const ProductPage = () => {
 
       <div className="bg-white min-h-screen pt-24 px-4">
         <h1 className="text-3xl font-bold mb-6">
-          Products on Category  <span className="text-green-600">Farming and fertilizers</span>:
+          Products on Category  <span className="text-green-600">Grains and Pulses</span>:
         </h1>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
