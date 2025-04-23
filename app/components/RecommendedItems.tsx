@@ -6,7 +6,7 @@ import { supabase } from '../utils/supabaseClient';
 import { translateProducts} from '../utils/translate';
 
 export default function RecommendedItems() {
-  const [products, setProducts] = useState<{ id: number; image_url: string; name: string; price: number; rating: number }[]>([]);
+  const [products, setProducts] = useState<{ id: number; image_url: string; name: string;description: string; price: number; rating: number }[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,13 +19,15 @@ export default function RecommendedItems() {
         localStorage.setItem('products', JSON.stringify(data));
       }
       setLoading(false);
-      const lang = localStorage.getItem('lang') || 'en';
-      if (lang !== 'en' && data && data.length > 0) {
-        await translateProducts(data, setProducts);
-      }
     };
 
-    fetchProducts();
+    const lang = localStorage.getItem('lang') || 'en';
+    fetchProducts().then(() => {
+      const storedProducts = JSON.parse(localStorage.getItem('products') || '[]');
+      if (lang !== 'en' && storedProducts.length > 0) {
+        translateProducts(storedProducts, setProducts);
+      }
+    });
   }, []);
 
   if (loading) return <p>Loading...</p>;
@@ -39,6 +41,13 @@ export default function RecommendedItems() {
             id={product.id || 0}
             image={product.image_url}
             title={product.name || 'Product Name'}
+            description={
+                product.description
+                  ? product.description.length > 25
+                    ? product.description.slice(0, 25) + '...'
+                    : product.description
+                  : 'No Description'
+              }
             price={product.price || 0}
             rating={product.rating || 0}
           />

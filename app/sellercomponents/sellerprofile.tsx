@@ -3,8 +3,108 @@ import { UserCircleIcon, DocumentTextIcon, BanknotesIcon } from '@heroicons/reac
 import { supabase } from '../utils/supabaseClient';
 import toast from 'react-hot-toast';
 
+const translations = {
+  en: {
+    sellerProfile: "Seller Profile",
+    personalDetails: "Personal Details",
+    businessInfo: "Business Information",
+    financialInfo: "Financial Information",
+    edit: "Edit",
+    cancel: "Cancel",
+    save: "Save",
+    successMessage: "Profile updated successfully!",
+    fields: {
+      name: "Name",
+      aadhaar: "Aadhaar",
+      village: "Village",
+      district: "District",
+      state: "State",
+      pinCode: "PIN Code",
+      businessType: "Business Type",
+      additionalDetails: "Additional Details",
+      bankName: "Bank Name",
+      accountNumber: "Account Number",
+      ifsc: "IFSC Code",
+      upi: "UPI ID"
+    }
+  },
+  ml: {
+    sellerProfile: "വിൽപ്പനക്കാരൻ പ്രൊഫൈൽ",
+    personalDetails: "വ്യക്തിഗത വിവരങ്ങൾ",
+    businessInfo: "വ്യാപാര വിവരങ്ങൾ",
+    financialInfo: "ധനകാര്യ വിവരങ്ങൾ",
+    edit: "എഡിറ്റ് ചെയ്യുക",
+    cancel: "റദ്ദാക്കുക",
+    save: "സംരക്ഷിക്കുക",
+    successMessage: "പ്രൊഫൈൽ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!",
+    fields: {
+      name: "പേര്",
+      aadhaar: "ആധാർ",
+      village: "ഗ്രാമം",
+      district: "ജില്ല",
+      state: "സംസ്ഥാനം",
+      pinCode: "പിൻ കോഡ്",
+      businessType: "ബിസിനസ് തരം",
+      additionalDetails: "അധിക വിവരങ്ങൾ",
+      bankName: "ബാങ്ക് പേര്",
+      accountNumber: "അക്കൗണ്ട് നമ്പർ",
+      ifsc: "IFSC കോഡ്",
+      upi: "UPI ഐഡി"
+    }
+  },
+  hi: {
+    sellerProfile: "विक्रेता प्रोफ़ाइल",
+    personalDetails: "व्यक्तिगत विवरण",
+    businessInfo: "व्यावसायिक जानकारी",
+    financialInfo: "वित्तीय जानकारी",
+    edit: "संपादन",
+    cancel: "रद्द करें",
+    save: "सहेजें",
+    successMessage: "प्रोफ़ाइल सफलतापूर्वक अद्यतन!",
+    fields: {
+      name: "नाम",
+      aadhaar: "आधार",
+      village: "गाँव",
+      district: "जिला",
+      state: "राज्य",
+      pinCode: "पिन कोड",
+      businessType: "व्यवसाय प्रकार",
+      additionalDetails: "अतिरिक्त विवरण",
+      bankName: "बैंक का नाम",
+      accountNumber: "खाता संख्या",
+      ifsc: "आईएफएससी कोड",
+      upi: "यूपीआई आईडी"
+    }
+  },
+  ta: {
+    sellerProfile: "விற்பனையாளர் சுயவிவரம்",
+    personalDetails: "தனிப்பட்ட விவரங்கள்",
+    businessInfo: "வணிக தகவல்",
+    financialInfo: "நிதி தகவல்",
+    edit: "திருத்து",
+    cancel: "ரத்து செய்",
+    save: "சேமி",
+    successMessage: "சுயவிவரம் வெற்றிகரமாக புதுப்பிக்கப்பட்டது!",
+    fields: {
+      name: "பெயர்",
+      aadhaar: "ஆதார்",
+      village: "கிராமம்",
+      district: "மாவட்டம்",
+      state: "மாநிலம்",
+      pinCode: "அஞ்சல் குறியீடு",
+      businessType: "வணிக வகை",
+      additionalDetails: "கூடுதல் விவரங்கள்",
+      bankName: "வங்கி பெயர்",
+      accountNumber: "கணக்கு எண்",
+      ifsc: "IFSC குறியீடு",
+      upi: "UPI ஐடி"
+    }
+  }
+};
+
 const SellerProfile = () => {
-    const userId = localStorage.getItem('userId');
+  const userId = localStorage.getItem('userId');
+  const [lang, setLang] = useState<'en' | 'ml' | 'hi' | 'ta'>('en');
   const [profileData, setProfileData] = useState({
     name: '',
     aadhaar: '',
@@ -26,56 +126,37 @@ const SellerProfile = () => {
   });
 
   useEffect(() => {
+    const savedLang = (localStorage.getItem('lang') as 'en' | 'ml' | 'hi' | 'ta') || 'en';
+    setLang(savedLang);
+    
     if (userId) {
       const fetchProfileData = async () => {
         const { data, error } = await supabase.from('seller').select('*').eq('id', userId).single();
         if (data) {
           setProfileData(data);
-          const sellername = data.name;
-          localStorage.setItem('sellername', sellername);
+          localStorage.setItem('sellername', data.name);
         } else {
           console.error('Error fetching profile data:', error);
         }
       };
       fetchProfileData();
     }
-  }, []);
+  }, [userId]);
 
-interface ProfileData {
-    name: string;
-    aadhaar: string;
-    village: string;
-    district: string;
-    state: string;
-    pinCode: string;
-    businessType: string;
-    bankName: string;
-    accountNumber: string;
-    ifsc: string;
-    upi: string;
-    additionalDetails: string;
-}
-
-interface EditMode {
-    personal: boolean;
-    business: boolean;
-    financial: boolean;
-}
-
-const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     const { name, value } = e.target;
     setProfileData({ ...profileData, [name]: value });
-};
+  };
 
-const handleSave = async (section: keyof EditMode): Promise<void> => {
+  const handleSave = async (section: keyof typeof editMode): Promise<void> => {
     const { error } = await supabase.from('seller').update(profileData).eq('id', userId);
     if (error) {
-        console.error('Error updating profile data:', error);
+      console.error('Error updating profile data:', error);
     } else {
-        setEditMode({ ...editMode, [section]: false });
-        toast.success('Profile updated successfully!');
+      setEditMode({ ...editMode, [section]: false });
+      toast.success(translations[lang].successMessage);
     }
-};
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -84,7 +165,9 @@ const handleSave = async (section: keyof EditMode): Promise<void> => {
           <div className="flex justify-center mb-4">
             <UserCircleIcon className="h-12 w-12 text-green-600" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Seller Profile</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            {translations[lang].sellerProfile}
+          </h1>
         </div>
 
         <div className="space-y-8">
@@ -93,21 +176,23 @@ const handleSave = async (section: keyof EditMode): Promise<void> => {
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <UserCircleIcon className="h-8 w-8 text-green-600" />
-                <h2 className="text-2xl font-semibold text-gray-800">Personal Details</h2>
+                <h2 className="text-2xl font-semibold text-gray-800">
+                  {translations[lang].personalDetails}
+                </h2>
               </div>
               <button
                 onClick={() => setEditMode({ ...editMode, personal: !editMode.personal })}
                 className="text-green-600 hover:underline"
               >
-                {editMode.personal ? 'Cancel' : 'Edit'}
+                {editMode.personal ? translations[lang].cancel : translations[lang].edit}
               </button>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {(['name', 'aadhaar', 'village', 'district', 'state', 'pinCode'] as Array<keyof ProfileData>).map((field) => (
+              {(['name', 'aadhaar', 'village', 'district', 'state', 'pinCode'] as const).map((field) => (
                 <div key={field}>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {field.charAt(0).toUpperCase() + field.slice(1)}
+                    {translations[lang].fields[field]}
                   </label>
                   {editMode.personal ? (
                     <input
@@ -118,7 +203,9 @@ const handleSave = async (section: keyof EditMode): Promise<void> => {
                       className="text-gray-800 bg-gray-100 px-4 py-3 rounded-lg w-full"
                     />
                   ) : (
-                    <p className="text-gray-800 bg-gray-100 px-4 py-3 rounded-lg">{profileData[field]}</p>
+                    <p className="text-gray-800 bg-gray-100 px-4 py-3 rounded-lg">
+                      {profileData[field]}
+                    </p>
                   )}
                 </div>
               ))}
@@ -128,7 +215,7 @@ const handleSave = async (section: keyof EditMode): Promise<void> => {
                 onClick={() => handleSave('personal')}
                 className="mt-4 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
               >
-                Save
+                {translations[lang].save}
               </button>
             )}
           </div>
@@ -138,19 +225,23 @@ const handleSave = async (section: keyof EditMode): Promise<void> => {
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <DocumentTextIcon className="h-8 w-8 text-green-600" />
-                <h2 className="text-2xl font-semibold text-gray-800">Business Information</h2>
+                <h2 className="text-2xl font-semibold text-gray-800">
+                  {translations[lang].businessInfo}
+                </h2>
               </div>
               <button
                 onClick={() => setEditMode({ ...editMode, business: !editMode.business })}
                 className="text-green-600 hover:underline"
               >
-                {editMode.business ? 'Cancel' : 'Edit'}
+                {editMode.business ? translations[lang].cancel : translations[lang].edit}
               </button>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Business Type</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {translations[lang].fields.businessType}
+                </label>
                 {editMode.business ? (
                   <input
                     type="text"
@@ -160,12 +251,16 @@ const handleSave = async (section: keyof EditMode): Promise<void> => {
                     className="text-gray-800 bg-gray-100 px-4 py-3 rounded-lg w-full"
                   />
                 ) : (
-                  <p className="text-gray-800 bg-gray-100 px-4 py-3 rounded-lg">{profileData.businessType}</p>
+                  <p className="text-gray-800 bg-gray-100 px-4 py-3 rounded-lg">
+                    {profileData.businessType}
+                  </p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Additional Details</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {translations[lang].fields.additionalDetails}
+                </label>
                 {editMode.business ? (
                   <textarea
                     name="additionalDetails"
@@ -174,7 +269,9 @@ const handleSave = async (section: keyof EditMode): Promise<void> => {
                     className="text-gray-800 bg-gray-100 px-4 py-3 rounded-lg w-full"
                   />
                 ) : (
-                  <p className="text-gray-800 bg-gray-100 px-4 py-3 rounded-lg">{profileData.additionalDetails}</p>
+                  <p className="text-gray-800 bg-gray-100 px-4 py-3 rounded-lg">
+                    {profileData.additionalDetails}
+                  </p>
                 )}
               </div>
             </div>
@@ -183,7 +280,7 @@ const handleSave = async (section: keyof EditMode): Promise<void> => {
                 onClick={() => handleSave('business')}
                 className="mt-4 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
               >
-                Save
+                {translations[lang].save}
               </button>
             )}
           </div>
@@ -193,21 +290,23 @@ const handleSave = async (section: keyof EditMode): Promise<void> => {
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <BanknotesIcon className="h-8 w-8 text-green-600" />
-                <h2 className="text-2xl font-semibold text-gray-800">Financial Information</h2>
+                <h2 className="text-2xl font-semibold text-gray-800">
+                  {translations[lang].financialInfo}
+                </h2>
               </div>
               <button
                 onClick={() => setEditMode({ ...editMode, financial: !editMode.financial })}
                 className="text-green-600 hover:underline"
               >
-                {editMode.financial ? 'Cancel' : 'Edit'}
+                {editMode.financial ? translations[lang].cancel : translations[lang].edit}
               </button>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {(['bankName', 'accountNumber', 'ifsc', 'upi'] as Array<keyof ProfileData>).map((field) => (
+              {(['bankName', 'accountNumber', 'ifsc', 'upi'] as const).map((field) => (
                 <div key={field}>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {field.charAt(0).toUpperCase() + field.slice(1)}
+                    {translations[lang].fields[field]}
                   </label>
                   {editMode.financial ? (
                     <input
@@ -218,7 +317,9 @@ const handleSave = async (section: keyof EditMode): Promise<void> => {
                       className="text-gray-800 bg-gray-100 px-4 py-3 rounded-lg w-full"
                     />
                   ) : (
-                    <p className="text-gray-800 bg-gray-100 px-4 py-3 rounded-lg">{profileData[field]}</p>
+                    <p className="text-gray-800 bg-gray-100 px-4 py-3 rounded-lg">
+                      {profileData[field]}
+                    </p>
                   )}
                 </div>
               ))}
@@ -228,7 +329,7 @@ const handleSave = async (section: keyof EditMode): Promise<void> => {
                 onClick={() => handleSave('financial')}
                 className="mt-4 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
               >
-                Save
+                {translations[lang].save}
               </button>
             )}
           </div>

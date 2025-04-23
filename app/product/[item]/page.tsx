@@ -9,6 +9,7 @@ import ProductCard from '@/app/components/productcard';
 interface Product {
   id: number;
   name: string;
+  description: string;
   price: number;
   image_url: string;
   rating: number;
@@ -58,9 +59,11 @@ const ProductPage = () => {
           
           data.map((product) => (
             <ProductCard
+              id={product.id}
               key={product.id}
               image={product.image_url}
               title={product.name}
+              description={product.description}
               price={product.price}
               rating={product.rating}
             />

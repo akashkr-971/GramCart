@@ -9,6 +9,7 @@ interface ProductCardProps {
   id: number;
   image: string;
   title: string;
+  description: string;
   price: number;
   rating: number;
 }
@@ -65,7 +66,7 @@ const translations ={
 }
 
 
-export default function ProductCard({ id,image, title, price, rating }: ProductCardProps) {
+export default function ProductCard({ id,image, title,description, price, rating }: ProductCardProps) {
   const [lang, setLang] = useState<'en' | 'hi' | 'ta' | 'ml'>('en');
       
     useEffect(() => {
@@ -78,9 +79,10 @@ export default function ProductCard({ id,image, title, price, rating }: ProductC
     }, []);
   return (
     <div id="productcard">
-        <div className="bg-white p-3 rounded-lg shadow-md w-">
+        <div className="bg-white p-3 rounded-lg shadow-md">
           <Image src={image} alt={title} width={200} height={200} className="w-full h-40 object-cover rounded-md mb-2" />
           <h3 className="text-lg text-black font-semibold mb-2">{title}</h3>
+          <p>{description}</p>
           <div className="text-gray-700 mb-2 flex items-center justify-between">
             <span className="text-green-600 font-bold">₹ {price}</span>
             <div className='flex gap-2 items-center'>
@@ -89,9 +91,6 @@ export default function ProductCard({ id,image, title, price, rating }: ProductC
             </div>
           </div>
           <div className="flex justify-between mt-4 gap-2">
-            <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-              {translations[lang].viewDetails}
-            </button>
             <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
               onClick={()=>{
                 addToCart({ title, id, price, image, quantity: 1 });

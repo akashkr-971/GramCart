@@ -14,14 +14,15 @@ const ArtisansNearYou = () => {
       const { data, error } = await supabase
         .from('products')
         .select('*')
-        .order('random()', { ascending: true })
-        .limit(6);
+        .limit(3);
       
       if (error) {
         console.error('Error fetching products:', error);
         setLoading(false);
         return;
-      }
+      }else {
+        console.log('Fetched products:', data);
+    }
 
       setProducts(data);
       setLoading(false);
@@ -47,6 +48,13 @@ const ArtisansNearYou = () => {
               id={product.id}
               image={product.image_url}
               title={product.name}
+              description={
+                product.description
+                  ? product.description.length > 25
+                    ? product.description.slice(0, 25) + '...'
+                    : product.description
+                  : 'No Description'
+              }
               price={product.price}
               rating={product.rating}
             />

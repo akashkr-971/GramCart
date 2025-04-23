@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@coinbase/onchainkit": "^0.38.8",
     "@heroicons/react": "^2.2.0",
     "@radix-ui/react-dialog": "^1.1.7",
     "@supabase/supabase-js": "^2.49.4",
