@@ -1,5 +1,6 @@
 'use client';
 import { supabase } from '../../utils/supabaseClient';
+import Image from 'next/image';
 
 import { useEffect, useState } from "react";
 
@@ -157,10 +158,12 @@ export default function Login() {
                 className="text-black w-full px-4 py-2 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder={t.passwordPlaceholder}
               />
-              <img
-                src={visible ? "hide.png" : "show.png"}
+              <Image
+                src={visible ? "/hide.png" : "/show.png"}
                 alt={visible ? "hide image" : "show image"}
-                className="h-8 w-8 absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer"
+                height={25}
+                width={25}
+                className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
                 onClick={() => setVisible(!visible)}
               />
             </div>

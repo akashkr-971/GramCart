@@ -7,6 +7,7 @@ import Dashboard from '../sellercomponents/dashboard';
 import Profile from '../sellercomponents/sellerprofile';
 import Footer from '../components/Footer';
 import Askai from '../sellercomponents/askai';
+import Bookings from '../sellercomponents/bookings';
 
 export default function Seller() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -42,7 +43,7 @@ export default function Seller() {
       <div className="max-w-7xl mx-auto px-4  lg:px-8">
         <div className="flex justify-between h-16 items-center ">
           <div className="flex-shrink-0 flex items-center">
-            <Link href="/" className="text-2xl font-bold text-green-800">
+            <Link href="/seller" className="text-2xl font-bold text-green-800">
               Gram<span className="text-green-600">Cart</span>
             </Link>
           </div>
@@ -53,6 +54,9 @@ export default function Seller() {
               <button className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${selectedBar === 'Dashboard' ? 'text-green-700 font-semibold bg-green-100' : 'text-gray-600 hover:text-green-700 hover:bg-green-50'}`}
                 onClick={() => setSelectedBar("Dashboard")}>
                 DashBoard</button>
+              <button className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${selectedBar === 'Bookings' ? 'text-green-700 font-semibold bg-green-100' : 'text-gray-600 hover:text-green-700 hover:bg-green-50'}`}
+                onClick={() => setSelectedBar("Bookings")}>
+                Bookings</button>
               <button className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${selectedBar === 'Add Product' ? 'text-green-700 font-semibold bg-green-100' : 'text-gray-600 hover:text-green-700 hover:bg-green-50'}`}
                 onClick={() => setSelectedBar("Add Product")}>
                 Add Product</button>
@@ -110,6 +114,10 @@ export default function Seller() {
       {selectedBar === "Dashboard" && 
         <div>
             <Dashboard/>
+        </div>}
+      {selectedBar === "Bookings" && 
+        <div>
+            <Bookings/>  
         </div>}
       {selectedBar === "Add Product" && 
         <div>

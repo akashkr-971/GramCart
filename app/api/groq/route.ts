@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 export async function POST(req: Request) {
-  const { userInput ,task , actor, sellerdata, lang,mode } = await req.json();
+  const { userInput ,task , actor, sellerdata, lang } = await req.json();
 
   try {
     if (!userInput || !task) {

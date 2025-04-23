@@ -18,17 +18,11 @@ export default function AskAIWidget({ role }: AskaiProps) {
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState<{ sender: 'user' | 'ai'; text: string }[]>([]);
 
-  type SpeechRecognitionType = typeof window extends { webkitSpeechRecognition: infer T }
-    ? T
-    : typeof window extends { SpeechRecognition: infer S }
-      ? S
-      : any;
-  
-    const recognitionRef = useRef<InstanceType<SpeechRecognitionType> | null>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    const SpeechRecognitionConstructor = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognitionConstructor =window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognitionConstructor) {
       const recognition = new SpeechRecognitionConstructor();
       recognition.continuous = false;

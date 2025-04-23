@@ -24,7 +24,7 @@ const ArtisansNearYou = () => {
       setProducts(data);
       setLoading(false);
 
-      let lang = localStorage.getItem('lang') || 'en';
+      const lang = localStorage.getItem('lang') || 'en';
        if (lang !== 'en' && data.length > 0) {
         await translateProducts(data, setProducts);
       }

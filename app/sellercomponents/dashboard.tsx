@@ -142,9 +142,9 @@ const DashBoard = () => {
       </div>
 
       {/* Sales Graph Section */}
-      <div className="bg-white shadow-lg rounded-xl p-8 mb-16 overflow-hidden">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Sales Overview</h2>
-        <div className="overflow-x-auto">
+      <div className="bg-white shadow-lg rounded-xl p-8 mb-16 w-full overflow-hidden">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6 w-full">Sales Overview</h2>
+        <div className="w-full">
           <Line data={salesData} />
         </div>
       </div>
@@ -210,22 +210,30 @@ const DashBoard = () => {
               </tr>
             </thead>
             <tbody>
-              {products.map((product) => (
+              {products.length > 0 ? (
+              products.map((product) => (
                 <tr key={product.id} className="hover:bg-gray-50">
-                  <td className="py-3 px-4 text-lg text-gray-900">{product.name}</td>
-                  <td className="py-3 px-4 text-lg text-gray-500">₹{product.price}</td>
-                  <td className="py-3 px-4 text-lg text-gray-500">{product.stock}</td>
-                  <td className="py-3 px-4 text-lg text-gray-500">{product.category}</td>
-                  <td className="py-3 px-4 text-lg text-gray-900">
-                    <button
-                      onClick={() => handleEditProduct(product)}
-                      className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
-                    >
-                      Edit
-                    </button>
-                  </td>
+                <td className="py-3 px-4 text-lg text-gray-900">{product.name}</td>
+                <td className="py-3 px-4 text-lg text-gray-500">₹{product.price}</td>
+                <td className="py-3 px-4 text-lg text-gray-500">{product.stock}</td>
+                <td className="py-3 px-4 text-lg text-gray-500">{product.category}</td>
+                <td className="py-3 px-4 text-lg text-gray-900">
+                  <button
+                  onClick={() => handleEditProduct(product)}
+                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+                  >
+                  Edit
+                  </button>
+                </td>
                 </tr>
-              ))}
+              ))
+              ) : (
+              <tr>
+                <td colSpan={5} className="py-3 px-4 text-lg text-gray-500 text-center">
+                No products available.
+                </td>
+              </tr>
+              )}
             </tbody>
           </table>
         </div>

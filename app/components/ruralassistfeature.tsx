@@ -55,7 +55,6 @@ export default function MarqueeAlert() {
     const cleanedMessage = stripEmojis(message);
 
     if (lang === 'ml' || lang === 'ta') {
-      // Call custom TTS API
       try {
         const response = await fetch('/api/tts', {
           method: 'POST',

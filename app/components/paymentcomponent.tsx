@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 export default function PaymentComponent() {
   const [paymentType, setPaymentType] = useState<'card' | 'upi' | 'crypto' | 'cash'>('card');
-  let [amount, setAmount] = useState('');
+  const [amount, setAmount] = useState('');
 
   const [cardNumber, setCardNumber] = useState('');
   const [expiryDate, setExpiryDate] = useState('');

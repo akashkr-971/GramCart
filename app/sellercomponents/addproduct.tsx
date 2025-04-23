@@ -89,6 +89,7 @@ const AddProduct = () => {
           price: parseFloat(productData.price),
           description: productData.description,
           stock: parseInt(productData.stock),
+          category: productData.category,
           image_url: imageUrl,
           seller_id: userid,
         },

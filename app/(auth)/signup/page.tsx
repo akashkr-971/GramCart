@@ -126,6 +126,42 @@ export default function Signup() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [visible , setVisible] = useState(false);
 
+  useEffect(() => {
+    geocodeaddress();
+  }, []);
+
+  function geocodeaddress(){
+    if (typeof window !== "undefined" && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+
+          try {
+            const response = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
+              {
+                headers: {
+                  'User-Agent': 'yourapp/1.0 (youremail@example.com)',
+                },
+              }
+            );
+
+            const data = await response.json();
+            console.log("Address:", data.display_name);
+            (document.getElementById('address') as HTMLInputElement)!.value = data.display_name;
+          } catch (error) {
+            console.error("Failed to reverse geocode:", error);
+          }
+        },
+        (error) => {
+          console.error("Geolocation error:", error.message);
+        }
+      );
+    } else {
+      console.log("Geolocation is not supported by this browser or not running on client.");
+    }
+  }
   // Countdown timer for OTP resend
   useEffect(() => {
     if (otpSent && countdown > 0) {
@@ -194,6 +230,9 @@ export default function Signup() {
           ? { phone, token: otpCode, type: 'sms' }
           : { email, token: otpCode, type: 'email' }
       );
+
+      console.log('Verifying OTP with:', usePhone ? phone : email, otpCode);
+
       
       if(data.user){
         console.log("User ID:", data.user.id);
@@ -319,10 +358,14 @@ export default function Signup() {
             <input
               value={address}
               onChange={(e) => setAddress(e.target.value)}
+              id='address'
               className="text-black w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 resize-none"
               placeholder={t.addressPlaceholder}
             />
             {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
+            <svg xmlns="http://www.w3.org/2000/svg" onClick={()=>geocodeaddress()} width="16" height="16" fill="currentColor" className="bi bi-geo-alt-fill relative -top-7 left-90" viewBox="0 0 16 16">
+              <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
+            </svg>
           </div>
         </div>
 

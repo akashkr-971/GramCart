@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import ProductCard from './productcard';
 import { supabase } from '../utils/supabaseClient';
-import { translateProducts, Producttype } from '../utils/translate';
+import { translateProducts} from '../utils/translate';
 
 export default function RecommendedItems() {
   const [products, setProducts] = useState<{ id: number; image_url: string; name: string; price: number; rating: number }[]>([]);
@@ -19,7 +19,7 @@ export default function RecommendedItems() {
         localStorage.setItem('products', JSON.stringify(data));
       }
       setLoading(false);
-      let lang = localStorage.getItem('lang') || 'en';
+      const lang = localStorage.getItem('lang') || 'en';
       if (lang !== 'en' && data && data.length > 0) {
         await translateProducts(data, setProducts);
       }
