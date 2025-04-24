@@ -89,6 +89,7 @@ export default function Delivery() {
     if (!error) {
       localStorage.removeItem("userId");
       setIsLoggedIn(false);
+      window.location.href = "/";
     }
   };
 
