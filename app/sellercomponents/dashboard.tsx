@@ -247,6 +247,13 @@ const DashBoard = () => {
     ],
   };
 
+  useEffect(() => {
+    localStorage.setItem('recentsales', JSON.stringify(recentSales));
+    const statsToStore = stats.map(({ name, value }) => ({ name, value }));
+    localStorage.setItem('stats', JSON.stringify(statsToStore));
+    
+  })
+
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-6 overflow-x-hidden">
       <h1 className="mt-10 text-4xl font-extrabold text-gray-900 mb-12 text-center">

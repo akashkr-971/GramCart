@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { UserCircleIcon, DocumentTextIcon, BanknotesIcon } from '@heroicons/react/24/outline';
 import { supabase } from '../utils/supabaseClient';
 import toast from 'react-hot-toast';
+import { Stats } from 'fs';
 
 const translations = {
   en: {
@@ -135,6 +136,28 @@ const SellerProfile = () => {
         if (data) {
           setProfileData(data);
           localStorage.setItem('sellername', data.name);
+          const details = {
+            name: data.name,
+            aadhaar: data.aadhaar,
+            village: data.village,
+            district: data.district,
+            state: data.state,
+            pinCode: data.pinCode,
+            businessType: data.businessType,
+            bankName: data.bankName,
+            accountNumber: data.accountNumber,
+            ifsc: data.ifsc,
+            upi: data.upi,
+            additionalDetails: data.additionalDetails,
+          };
+          const stat = localStorage.getItem('stats');
+          const recentsales = localStorage.getItem('recentsales');
+          const datatosend = {
+            details,
+            stat,
+            recentsales
+          };
+          localStorage.setItem('sellerdetails', JSON.stringify(datatosend));
         } else {
           console.error('Error fetching profile data:', error);
         }
