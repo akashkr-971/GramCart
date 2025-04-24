@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { supabase } from "../utils/supabaseClient";
 
 export default function DeliveryOnboarding() {
@@ -22,6 +21,16 @@ export default function DeliveryOnboarding() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  let userId: string | null = null;
+  useEffect(() => {
+    userId = localStorage.getItem("userId");
+  }, []);
+  if (!userId) {
+    setError("User ID not found. Please log in again.");
+    setLoading(false);
+    return;
+  }
+
   const handleSubmit = async () => {
     setError(null);
     setLoading(true);
@@ -34,16 +43,6 @@ export default function DeliveryOnboarding() {
 
     if (vehicleType !== "cycle" && !form.license) {
       setError("License is required for motor vehicles.");
-      setLoading(false);
-      return;
-    }
-
-    let userId: string | null = null;
-    useEffect(() => {
-      userId = localStorage.getItem("userId");
-    }, []);
-    if (!userId) {
-      setError("User ID not found. Please log in again.");
       setLoading(false);
       return;
     }
@@ -71,8 +70,12 @@ export default function DeliveryOnboarding() {
       } else {
         window.location.href = "/delivery";
       }
-    } catch (err: any) {
-      setError("Unexpected error occurred: " + err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError("Unexpected error occurred: " + err.message);
+      } else {
+        setError("Unexpected error occurred.");
+      }
     } finally {
       setLoading(false);
     }

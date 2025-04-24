@@ -5,7 +5,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 
 const Payments = () => {
   const [earnings, setEarnings] = useState(500);
-  const [paymentHistory, setPaymentHistory] = useState([
+  const [paymentHistory] = useState([
     { 
       id: 1,
       date: "2025-04-20", 

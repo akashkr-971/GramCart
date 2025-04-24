@@ -72,6 +72,17 @@ export default function DeliveryProfile() {
     return languageMap[code as keyof typeof languageMap] || code;
   };
 
+  type LabelMap = {
+  name: string;
+  address: string;
+  phone: string;
+  vehicle_type: string;
+  license: string;
+  experience: string;
+  preferred_language: string;
+  preferred_locations: string;
+};
+
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-8">
       <div className="bg-green-50 rounded-xl p-6 shadow-sm mt-20">
@@ -91,7 +102,7 @@ export default function DeliveryProfile() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {Object.entries(deliveryAgentData).map(([key, value]) => {
-            const labelMap: any = {
+            const labelMap: LabelMap = {
               name: 'Name',
               address: 'Address',
               phone: 'Phone',
@@ -105,7 +116,7 @@ export default function DeliveryProfile() {
             return (
               <div key={key}>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {labelMap[key]}
+                  {labelMap[key as keyof LabelMap]}
                 </label>
                 {isEditing ? (
                   <input

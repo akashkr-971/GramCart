@@ -11,7 +11,6 @@ const Preferences = () => {
   ]);
   const [newLocation, setNewLocation] = useState("");
   const [deliveryRadius, setDeliveryRadius] = useState(15);
-  const [vehicleType, setVehicleType] = useState("bike");
   const [availability, setAvailability] = useState({
     start: "09:00",
     end: "18:00"
