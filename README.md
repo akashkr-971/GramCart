@@ -93,14 +93,13 @@ Highlight the most important features of your project:
 
 ### Requirements:
 - Next.js
-- API Keys (if any)
-- .env file setup (if needed)
-        - NEXT_PUBLIC_SUPABASE_URL
-        -NEXT_PUBLIC_SUPABASE_ANON_KEY
-        -GOOGLE_TTS_API_KEY
-        -GROQ_API_KEY
-        -COINBASE_COMMERCE_API_KEY
-        -NEXT_PUBLIC_OPEN_CAGE_API_KEY
+
+- NEXT_PUBLIC_SUPABASE_URL
+- NEXT_PUBLIC_SUPABASE_ANON_KEY
+- GOOGLE_TTS_API_KEY
+- GROQ_API_KEY
+- COINBASE_COMMERCE_API_KEY
+- NEXT_PUBLIC_OPEN_CAGE_API_KEY
 
 ### Local Setup:
 ```bash
