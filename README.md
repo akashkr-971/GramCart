@@ -1,36 +1,140 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+![github-submission-banner](https://github.com/user-attachments/assets/a1493b84-e4e2-456e-a791-ce35ee2bcf2f)
 
-## Getting Started
+# 🚀 GramCart
 
-First, run the development server:
+> A RuralE-commerce platform
 
+---
+
+## 📌 Problem Statement
+
+Problem Statement 7 – Transform the Future of Rural Commerce
+
+---
+
+## 🎯 Objective
+
+The project that we have build is to help rural people
+go through the ecommerce website easier.
+We have enabled multilingual that is users can select their prefered language.
+We have integrated groq for search recommendations on the websie and also as a chatbot.
+Added coinbase commerce base for accepting cryptocurrencies from the buyers who are outside the rural region.
+we mainly have 4 actors 
+- User/buyer
+- Seller
+- Delivery agent
+- Admin
+
+
+---
+
+## 🧠 Team & Approach
+
+### Team Name:  
+`SENIORS`
+
+### Team Members:  
+- AKASH KR  github:(https://github.com/akashkr-971) linkedin:(https://www.linkedin.com/in/akash-kr-kochi/)
+- DINIL RAJ
+- ALWIN SHAJEES
+- ABAT MATHEW RAJESH
+
+### Your Approach:  
+- I have also found it hard to search for products on e-commerce app
+- Multiple languages and easy to use
+
+---
+
+## 🛠️ Tech Stack
+
+### Core Technologies Used:
+- Frontend: Next.js 
+- Backend:Supabase
+- Database:Supabase
+- APIs:Google text to speech , coinbase ecommerce , groq api 
+- Hosting: Vercel
+
+### Sponsor Technologies Used (if any):
+- [✅] **Groq:** Added for search recommendations and chat 
+- [ ] **Monad:** _Your blockchain implementation_  
+- [ ] **Fluvio:** _Real-time data handling_  
+- [✅] **Base:** Accept crytopayments 
+- [ ] **Screenpipe:** _Screen-based analytics or workflows_  
+- [ ] **Stellar:** _Payments, identity, or token usage_
+*(Mark with ✅ if completed)*
+---
+
+## ✨ Key Features
+
+Highlight the most important features of your project:
+
+- ✅ Multilingual
+- ✅ Easy to use 
+- ✅ Detailed
+
+
+## 📽️ Demo & Deliverables
+
+- **Demo Video Link:** https://drive.google.com/file/d/13YLA7dxw_O-ChSNADN7S8Wr8JdNAIvuF/view?usp=sharing
+
+---
+
+## ✅ Tasks & Bonus Checklist
+
+- [✅] **All members of the team completed the mandatory task - Followed at least 2 of our social channels and filled the form** (Details in Participant Manual)  
+- [ ] **All members of the team completed Bonus Task 1 - Sharing of Badges and filled the form (2 points)**  (Details in Participant Manual)
+- [ ] **All members of the team completed Bonus Task 2 - Signing up for Sprint.dev and filled the form (3 points)**  (Details in Participant Manual)
+
+*(Mark with ✅ if completed)*
+
+---
+
+## 🧪 How to Run the Project
+
+### Requirements:
+- Next.js
+- API Keys (if any)
+- .env file setup (if needed)
+        - NEXT_PUBLIC_SUPABASE_URL
+        -NEXT_PUBLIC_SUPABASE_ANON_KEY
+        -GOOGLE_TTS_API_KEY
+        -GROQ_API_KEY
+        -COINBASE_COMMERCE_API_KEY
+        -NEXT_PUBLIC_OPEN_CAGE_API_KEY
+
+### Local Setup:
 ```bash
+# Clone the repo
+git clone https://github.com/akashkr-971/gramcart
+
+# Install dependencies
+cd project-name
+npm install
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Provide any backend/frontend split or environment setup notes here.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧬 Future Scope
 
-## Learn More
+List improvements, extensions, or follow-up features:
 
-To learn more about Next.js, take a look at the following resources:
+- 📈 Add more functionalities
+- 🛡️ Offline access
+- 🌐 Localization / broader accessibility  
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🏁 Final Words
 
-## Deploy on Vercel
+Thanks for giving the opportunity to participate in this hackathon.I Suppose that i have done well 
+please let me know how my project is and how i can improve it.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Yours sincerly
+AKASH KR
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
