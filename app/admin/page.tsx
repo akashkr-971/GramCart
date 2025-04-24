@@ -4,7 +4,23 @@ import { useEffect, useState } from "react";
 import { supabase } from "../utils/supabaseClient";
 import Link from "next/link";
 
-// Dummy data
+interface User {
+  id: number;
+  email: string;
+  name:string;
+  user_type: 'admin' | 'seller' | 'buyer' | 'delivery';
+  status:string;
+}
+
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  seller_id: string;
+  category:string;
+}
+
+
 const dummyBookings = [
   { id: 101, userId: 1, sellerId: 2, date: "2023-10-26", service: "Plumbing", status: "Completed", amount: 50 },
   { id: 102, userId: 3, sellerId: 4, date: "2023-10-27", service: "Electrician", status: "Pending", amount: 75 },
@@ -20,8 +36,9 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("users");
   const [userFilter, setUserFilter] = useState("all");
 
-  const [users, setUsers] = useState<any[]>([]);
-  const [products, setProducts] = useState<any[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [errorUsers, setErrorUsers] = useState<string | null>(null);
   const [loadingProducts, setLoadingProducts] = useState(true);
@@ -136,7 +153,7 @@ export default function AdminDashboard() {
       case "bookings":
         return (
           <div className="min-h-screen">
-            <h2 className="text-2xl font-semibold mb-4">Bookings (Dummy Data)</h2>
+            <h2 className="text-2xl font-semibold mb-4">Bookings</h2>
             <div className="overflow-x-auto">
               <table className="min-w-full bg-white shadow rounded">
                 <thead className="bg-gray-200 text-gray-600 uppercase text-sm">
@@ -182,7 +199,7 @@ export default function AdminDashboard() {
       case "payments":
         return (
           <div className="min-h-screen">
-            <h2 className="text-2xl font-semibold mb-4">Payments (Dummy Data)</h2>
+            <h2 className="text-2xl font-semibold mb-4">Payments</h2>
             <div className="overflow-x-auto">
               <table className="min-w-full bg-white shadow rounded">
                 <thead className="bg-gray-200 text-gray-600 uppercase text-sm">

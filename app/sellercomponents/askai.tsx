@@ -72,6 +72,7 @@ export default function AskAIWidget({ role }: AskaiProps) {
     setMessage('');
 
     const sellerData = localStorage.getItem('sellerdetails');
+    console.log(sellerData)
     const productdata = localStorage.getItem('products');
 
     try {
@@ -91,8 +92,6 @@ export default function AskAIWidget({ role }: AskaiProps) {
 
       const data = await res.json();
       const reply = data.reply;
-      // const cleanedResponse = reply.replace(/<think>[\s\S]*?<\/think>/, "").trim();
-      // const cleanedResponse = reply.split("</think>")[1]?.trim() || "";
       setHistory(prev => [...prev, { sender: 'ai', text: reply || 'No response' }]);
     } catch (err) {
       console.error('AI Error:', err);

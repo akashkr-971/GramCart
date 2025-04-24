@@ -65,6 +65,7 @@ const translations: Record<'en' | 'hi' | 'ta' | 'ml', {
 export default function Login() {
   const [lang, setLang] = useState<"en" | "hi" | "ta" | "ml">("en");
   const [visible , setVisible] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const t = translations[lang];
 
   useEffect(() => {
@@ -87,8 +88,11 @@ export default function Login() {
       });
       if (error) {
         console.error("Login Error:", error.message);
+        setErrorMsg(error.message);
+        return;
       } else {
         console.log("Login Successful:", data);
+        setErrorMsg(null);
         const userId = data.user?.id;
         console.log("User ID:", userId);
         if (userId) {
@@ -171,6 +175,13 @@ export default function Login() {
               />
             </div>
           </div>
+
+          {errorMsg && (
+            <div className="text-red-600 text-sm bg-red-100 border border-red-300 rounded-md p-2 mb-4">
+              {errorMsg}
+            </div>
+          )}
+
 
           <button className="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-300">
             {t.signIn}
