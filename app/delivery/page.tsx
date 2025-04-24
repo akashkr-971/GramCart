@@ -68,7 +68,7 @@ export default function Delivery() {
         setIsLoggedIn(true);
         console.log("User ID from localStorage:", userId);
       }else{
-        window.location.href = "/login";
+        setIsLoggedIn(false);
       }
       const storedLang = localStorage.getItem('lang') as Language;
       if (storedLang) {
@@ -85,6 +85,12 @@ export default function Delivery() {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      window.location.href = "/";
+    }
+  }, [isLoggedIn]);
 
   const handleLogout = async () => {
     console.log("Attempting logout...");
