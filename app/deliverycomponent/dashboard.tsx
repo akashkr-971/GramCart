@@ -1,19 +1,19 @@
-
-import { useState } from "react";
+import { useMemo } from "react";
 import Link from "next/link";
 import { FiPackage, FiCheckCircle, FiDollarSign, FiMapPin, FiClock, FiActivity } from "react-icons/fi";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const Dashboard = () => {
-  const [pendingDeliveries] = useState(5);
-  const [completedDeliveries] = useState(10);
-  const [earnings] = useState(250);
+  // Static data can be directly assigned
+  const pendingDeliveries = 5;
+  const completedDeliveries = 10;
+  const earnings = 250;
 
-  const activities = [
+  const activities = useMemo(() => [
     { id: 1, time: "10:30 AM", status: "Picked Up", location: "Connaught Place", orderId: "#ORD1234" },
     { id: 2, time: "9:15 AM", status: "In Transit", location: "Cyber Hub", orderId: "#ORD1233" },
     { id: 3, time: "8:00 AM", status: "Delivered", location: "Saket", orderId: "#ORD1232" },
-  ];
+  ], []);  // Memoizing activities if it's coming from dynamic sources later
 
   const chartData = [
     { day: "Mon", earnings: 45 },
@@ -108,14 +108,13 @@ const Dashboard = () => {
       </div>
 
       {/* Recent Activities */}
-      <div className="bg-white p-6 rounded-xl shadow-sm " >
+      <div className="bg-white p-6 rounded-xl shadow-sm">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold text-gray-800 flex items-center">
             <FiClock className="mr-2 text-blue-600" /> Recent Activities
           </h2>
           <Link href="/delivery" className="text-green-600 hover:text-green-700 text-sm">
-            View All →
-          </Link>
+            View All →</Link>
         </div>
         <div className="space-y-4">
           {activities.map((activity) => (
@@ -142,9 +141,6 @@ const Dashboard = () => {
             </div>
           ))}
         </div>
-      </div>
-      <div className=" p-6 ">
-
       </div>
     </div>
   );

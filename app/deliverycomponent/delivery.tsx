@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { FiPackage, FiCheckCircle, FiClock, FiMapPin, FiSearch, FiAlertTriangle, FiActivity } from "react-icons/fi";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { format } from 'date-fns';
 
 const Deliveries = () => {
   const [pendingDeliveries, setPendingDeliveries] = useState([
@@ -39,6 +40,19 @@ const Deliveries = () => {
   ]);
 
   const [searchQuery, setSearchQuery] = useState("");
+  
+  // Filtering deliveries based on search query
+  const filteredPendingDeliveries = useMemo(() => 
+    pendingDeliveries.filter(delivery => 
+      delivery.customer.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      delivery.orderId.toLowerCase().includes(searchQuery.toLowerCase())
+    ), [pendingDeliveries, searchQuery]);
+
+  const filteredCompletedDeliveries = useMemo(() => 
+    completedDeliveries.filter(delivery => 
+      delivery.customer.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      delivery.orderId.toLowerCase().includes(searchQuery.toLowerCase())
+    ), [completedDeliveries, searchQuery]);
 
   const markAsCompleted = (id: number) => {
     const delivery = pendingDeliveries.find(d => d.id === id);
@@ -49,7 +63,7 @@ const Deliveries = () => {
         { 
           ...delivery, 
           status: "completed",
-          completedDate: new Date().toLocaleString() 
+          completedDate: format(new Date(), 'yyyy-MM-dd HH:mm:ss') // Consistent date format
         }
       ]);
     }
@@ -69,7 +83,7 @@ const Deliveries = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-800 mb-4 md:mb-0 mt-16">Delivery Management</h1>
-        <div className="relative w-full mt-16 md:w-64 ">
+        <div className="relative w-full mt-16 md:w-64">
           <FiSearch className="absolute left-3 top-3 text-gray-400" />
           <input
             type="text"
@@ -89,7 +103,7 @@ const Deliveries = () => {
               <p className="text-gray-500 mb-2 flex items-center">
                 <FiClock className="mr-2 text-yellow-600" /> Pending Deliveries Today
               </p>
-              <p className="text-3xl font-bold text-gray-800">{pendingDeliveries.length}</p>
+              <p className="text-3xl font-bold text-gray-800">{filteredPendingDeliveries.length}</p>
             </div>
             <div className="bg-yellow-100 p-4 rounded-full">
               <FiClock className="text-2xl text-yellow-600" />
@@ -103,7 +117,7 @@ const Deliveries = () => {
               <p className="text-gray-500 mb-2 flex items-center">
                 <FiCheckCircle className="mr-2 text-green-600" /> Completed Today
               </p>
-              <p className="text-3xl font-bold text-gray-800">{completedDeliveries.length}</p>
+              <p className="text-3xl font-bold text-gray-800">{filteredCompletedDeliveries.length}</p>
             </div>
             <div className="bg-green-100 p-4 rounded-full">
               <FiCheckCircle className="text-2xl text-green-600" />
@@ -138,12 +152,12 @@ const Deliveries = () => {
               <FiAlertTriangle className="mr-2 text-yellow-600" /> Pending Deliveries
             </h2>
             <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">
-              {pendingDeliveries.length} Active
+              {filteredPendingDeliveries.length} Active
             </span>
           </div>
-          
+
           <div className="space-y-4">
-            {pendingDeliveries.map((delivery) => (
+            {filteredPendingDeliveries.map((delivery) => (
               <div key={delivery.id} className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
@@ -188,12 +202,12 @@ const Deliveries = () => {
               <FiCheckCircle className="mr-2 text-green-600" /> Completed Deliveries
             </h2>
             <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
-              {completedDeliveries.length} Total
+              {filteredCompletedDeliveries.length} Total
             </span>
           </div>
 
           <div className="space-y-4">
-            {completedDeliveries.map((delivery) => (
+            {filteredCompletedDeliveries.map((delivery) => (
               <div key={delivery.id} className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                 <div className="flex items-center space-x-3 mb-2">
                   <div className="bg-green-100 p-2 rounded-full">

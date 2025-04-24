@@ -15,21 +15,20 @@ export default function DeliveryOnboarding() {
   const [vehicleType, setVehicleType] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("userId");
+    if (storedUserId) {
+      setUserId(storedUserId);
+    } else {
+      setError("User ID not found. Please log in again.");
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
-  let userId: string | null = null;
-  useEffect(() => {
-    userId = localStorage.getItem("userId");
-  }, []);
-  if (!userId) {
-    setError("User ID not found. Please log in again.");
-    setLoading(false);
-    return;
-  }
 
   const handleSubmit = async () => {
     setError(null);
@@ -47,12 +46,18 @@ export default function DeliveryOnboarding() {
       return;
     }
 
+    if (!userId) {
+      setError("User ID is not available. Please log in.");
+      setLoading(false);
+      return;
+    }
+
     try {
       const { error: supabaseError } = await supabase
         .from("delivery")
         .insert([
           {
-            id:userId,
+            id: userId,
             name: form.name,
             address: form.address,
             phone: form.phone,
