@@ -62,6 +62,8 @@ export default function Seller() {
     if (userId) {
       setIsLoggedIn(true);
       console.log("User ID from localStorage:", userId);
+    }else{
+      window.location.href = "/login";
     }
     const storedLang = localStorage.getItem('lang') as Language;
     if (storedLang) {

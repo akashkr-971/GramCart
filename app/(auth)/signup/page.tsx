@@ -10,6 +10,7 @@ const translations = {
     sellerDesc: "Farmer/Artisan",
     buyer: "I'm a Buyer",
     buyerDesc: "Individual/Business",
+    delivery:"I'm a Delivery Agent",
     phoneLabel: "Phone Number",
     phonePlaceholder: "Enter phone number",
     sendOTP: "Send OTP",
@@ -35,6 +36,7 @@ const translations = {
     sellerDesc: "किसान/कारीगर",
     buyer: "मैं खरीदार हूँ",
     buyerDesc: "व्यक्ति/व्यवसाय",
+    delivery:"मैं डिलिवरी एजेंट हूँ",
     phoneLabel: "फ़ोन नंबर",
     phonePlaceholder: "फ़ोन नंबर दर्ज करें",
     sendOTP: "ओटीपी भेजें",
@@ -65,6 +67,7 @@ const translations = {
     sendOTP: "ஓடிபி அனுப்பவும்",
     otpLabel: "ஓடிபி உள்ளிடவும்",
     createAccount: "கணக்கை உருவாக்கவும்",
+    delivery:"நான் விற்பனையாளர்",
     haveAccount: "ஏற்கனவே கணக்கு உள்ளதா?",
     logIn: "உள்நுழைக",
     nameLabel: "பெயர்",
@@ -91,6 +94,7 @@ const translations = {
     otpLabel: "ഒടിപി നൽകുക",
     createAccount: "അക്കൗണ്ട് സൃഷ്ടിക്കുക",
     haveAccount: "ഇതിനുമുമ്പ് അക്കൗണ്ട് ഉണ്ടോ?",
+    delivery:"നാന്‍ വിറ്പനൈയാളര്‍",
     logIn: "ലോഗിൻ ചെയ്യുക",
     nameLabel: "പേര്",
     addressLabel: "വിലാസം",
@@ -111,7 +115,7 @@ export default function Signup() {
   const [lang, setLang] = useState<"en" | "hi" | "ta" | "ml">("en");
   const t = translations[lang];
   
-  const [userType, setUserType] = useState<'seller' | 'buyer' | 'admin'>('buyer');
+  const [userType, setUserType] = useState<'seller' | 'buyer' | 'admin' | 'delivery'>('buyer');
   const [usePhone, setUsePhone] = useState(true);
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
@@ -248,7 +252,10 @@ export default function Signup() {
         console.log("User signed up successfully:", data.user.id);
         if(userType === 'seller'){
           window.location.href = '/sellerdashboard';
-        }else{
+        }else if(userType === 'delivery'){
+          window.location.href = '/deliveryonboard';
+        }else
+        {
           window.location.href = '/';
         }
       }else{
@@ -292,8 +299,11 @@ export default function Signup() {
         localStorage.setItem("userId", data.user.id);
         console.log("User signed up successfully:", data.user.id);
         if(userType === 'seller'){
-          window.location.href = '/newseller';
-        }else{
+          window.location.href = '/sellerdashboard';
+        }else if(userType === 'delivery'){
+          window.location.href = '/deliveryonboard';
+        }else
+        {
           window.location.href = '/';
         }
       }else{
@@ -338,6 +348,20 @@ export default function Signup() {
             <span className="block text-xs text-black">{t.sellerDesc}</span>
           </button>
         </div>
+        <div className="w-full mb-6">
+
+          <button 
+            type="button"
+            onClick={() => setUserType('delivery')}
+            className={`p-3 border-2 w-full rounded-lg transition-colors ${
+              userType === 'delivery' 
+                ? 'border-green-600 bg-green-50'
+                : 'border-green-200 hover:border-green-400'
+            }`}
+          >
+            <span className="block text-sm font-medium text-black">{t.delivery}</span>
+          </button>
+            </div>
 
         {/* Name & Address Fields */}
         <div className="space-y-4">

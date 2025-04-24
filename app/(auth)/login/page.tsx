@@ -108,7 +108,7 @@ export default function Login() {
         const userType = userData.user_type;
         console.log("User Type:", userType);
         if(userType === 'admin'){
-          window.location.href = '/admindashboard';
+          window.location.href = '/admin';
         }else if(userType === 'seller'){
           const { data} = await supabase
             .from('seller')
@@ -118,11 +118,14 @@ export default function Login() {
           console.log("Seller Data:", data);
           if (data) {
             window.location.href = '/seller';
-          } else {
+          } else{
             window.location.href = '/newseller';
             return;
           }
-        }else{
+        }else if(userType === 'delivery'){
+            window.location.href = '/delivery';
+        }
+        else{
           window.location.href = '/';
         }
       }

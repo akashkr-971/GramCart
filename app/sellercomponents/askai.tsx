@@ -72,6 +72,7 @@ export default function AskAIWidget({ role }: AskaiProps) {
     setMessage('');
 
     const sellerData = localStorage.getItem('sellerdetails');
+    const productdata = localStorage.getItem('products');
 
     try {
       const res = await fetch('/api/groq', {
@@ -83,12 +84,16 @@ export default function AskAIWidget({ role }: AskaiProps) {
           actor: role,
           sellerData,
           mode,
+          productdata
         }),
       });
       if (!res.ok) throw new Error('API Error');
 
       const data = await res.json();
-      setHistory(prev => [...prev, { sender: 'ai', text: data.reply || 'No response' }]);
+      const reply = data.reply;
+      // const cleanedResponse = reply.replace(/<think>[\s\S]*?<\/think>/, "").trim();
+      // const cleanedResponse = reply.split("</think>")[1]?.trim() || "";
+      setHistory(prev => [...prev, { sender: 'ai', text: reply || 'No response' }]);
     } catch (err) {
       console.error('AI Error:', err);
       setHistory(prev => [...prev, { sender: 'ai', text: 'Error contacting AI' }]);

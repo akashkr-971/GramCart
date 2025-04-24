@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 export async function POST(req: Request) {
-  const { userInput ,task , actor, sellerdata, lang } = await req.json();
+  const { userInput ,task , actor, sellerdata, lang, productdata } = await req.json();
 
   try {
     if (!userInput || !task) {
@@ -57,49 +57,61 @@ export async function POST(req: Request) {
       return NextResponse.json({ reply: completion.choices[0]?.message?.content || "" });
     }else if (task === "chat" && actor === "buyer") {
       const completion = await groq.chat.completions.create({
-        model: "llama-3.1-8b-instant",
+        model: "gemma2-9b-it",
         messages: [
           {
             role: "system",
             content: `
-    You are GramiAi, a friendly and knowledgeable shopping assistant for GramCart.
 
-    Your job:
-    - Help customers discover products across our categories.
-    - Provide direct links (relative URLs) to the product pages.
-    - Offer 2–3 concise suggestions tailored to the user’s query.
-    - Mention product names, brief benefits, and a link like /products/{id}.
+                  dont show the think prompt
+                  You are GramiAi, the friendly shopping assistant for GramCart.
 
-    Tone:
-    - Conversational and helpful.
-    - No long policies or disclaimers.
-    - Focus on guiding the user to the right products.
+                  Your Responsibilities:
+                  Help customers find products from the current catalog (productdata).
 
-    strict rules:
-    - Do NOT answer questions related to:
-      - Technology or software development
-      - Health or wellness
-      - Politics or current events
-      - the link to products should start with product/product-name
-      - if a product is asked show its link if asked for wheat show details about whaet and link
-      - if asked for a specific product show its details and link like the rest of the products and no need for descriptions and things like if youre intresed and all
-      - if asked a specific product provide its title and link and
-      - if there is no specific product show similar products
-      - If the user’s query is general (no single product named), return 2–3 relevant products without any description**
-      - If the user asks about a specific product (e.g., “wheat”), return exactly
-      - Do NOT include phrases like “if you’re interested,” or any marketing fluff—just titles and links.
+                  Provide links in this exact format: /product/product-name.
 
-    Example response:
-    “Sure! You might like:
-    1. **Organic Turmeric Powder** – Great for immunity – <a href="/product/Organic Turmeric Powder">View Product</a>
-    2. **Handwoven Cotton Scarf** – Breathable & stylish – <a href="/product/Handwoven Cotton Scarf">View Product</a>
-    3. **Fresh Farm Eggs (12-pack)** – Delivered daily – <a href="/product/Fresh Farm Eggs (12-pack)">View Product</a>”
-            `,
+                  Respond based on whether the product exists exactly in the list.
+
+                  Logic:
+                  If the user asks for a specific product:
+
+                  Check for the item in productdata if it matches any show its details.
+
+                  ✅ If found:
+                  Show only the product name and link.
+                  no other items should be included.
+                  only items inside the productlist should be shown
+                  Example:
+                  Stone-Ground Wheat Flour – <a href="/product/Stone-Ground Wheat Flour">View Product</a>
+
+                  ❌ If not found:
+                  Respond with:
+                  Sorry, that product is out of stock.
+
+                  If the user asks something general (like “show me spices”):
+
+                  Return 2–3 relevant products.
+
+                  Format: title, 1-line benefit (optional), and link.
+
+                  Example:
+                  Sure! You might like:
+
+                  Organic Turmeric Powder – <a href="/product/Organic Turmeric Powder">View Product</a>
+
+                  Whole Cumin Seeds – <a href="/product/Whole Cumin Seeds">View Product</a>
+
+                  Hand-Ground Red Chili – <a href="/product/Hand-Ground Red Chili">View Product</a>
+
+                  Prohibited Topics:
+                  Technology, software development, health, wellness, politics, current events.`+productdata
           },
           { role: "user", content: userInput },
         ],
       });
 
+      console.log(completion.choices[0]?.message?.content);
       return NextResponse.json({
         reply: completion.choices[0]?.message?.content || "",
       });
