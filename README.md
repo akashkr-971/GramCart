@@ -2,7 +2,7 @@
 
 # 🚀 GramCart
 
-> A RuralE-commerce platform
+> A Rural E-commerce platform
 
 ---
 
@@ -107,7 +107,7 @@ Highlight the most important features of your project:
 git clone https://github.com/akashkr-971/gramcart
 
 # Install dependencies
-cd project-name
+cd gramcart
 npm install
 
 # Start development server
@@ -132,6 +132,8 @@ List improvements, extensions, or follow-up features:
 
 Thanks for giving the opportunity to participate in this hackathon.I Suppose that i have done well 
 please let me know how my project is and how i can improve it.
+
+Feel free to connect me on LinkedIn and provide me with some insights.
 
 Yours sincerly
 AKASH KR
