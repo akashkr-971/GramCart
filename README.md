@@ -56,11 +56,8 @@ we mainly have 4 actors
 
 ### Sponsor Technologies Used (if any):
 - [✅] **Groq:** Added for search recommendations and chat 
-- [ ] **Monad:** _Your blockchain implementation_  
-- [ ] **Fluvio:** _Real-time data handling_  
 - [✅] **Base:** Accept crytopayments 
-- [ ] **Screenpipe:** _Screen-based analytics or workflows_  
-- [ ] **Stellar:** _Payments, identity, or token usage_
+
 *(Mark with ✅ if completed)*
 ---
 
