@@ -23,7 +23,6 @@ we mainly have 4 actors
 - User/buyer
 - Seller
 - Delivery agent
-- Admin
 
 
 ---
