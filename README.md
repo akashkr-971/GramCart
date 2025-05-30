@@ -4,13 +4,11 @@
 
 > A Rural E-commerce platform
 
----
 
 ## 📌 Problem Statement
 
 Problem Statement 7 – Transform the Future of Rural Commerce
 
----
 
 ## 🎯 Objective
 
